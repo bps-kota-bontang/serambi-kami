@@ -1,0 +1,40 @@
+name: CI/CD Serambi Kami
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build Serambi Kami
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Insecure Docker Repository
+        run: |
+          sudo truncate -s-2 /etc/docker/daemon.json
+          echo ", \"insecure-registries\": [\"${{ secrets.DOCKER_REGISTRY_URL }}\"]}" | sudo tee -a /etc/docker/daemon.json
+          sudo systemctl restart docker
+      - name: Docker Auth
+        run: |
+          echo "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" | docker login ${{ secrets.DOCKER_REGISTRY_URL }} --username ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password-stdin
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+      - name: Extract version and short commit hash
+        run: |
+          echo "VERSION=${{ steps.package-version.outputs.current-version}}" >> $GITHUB_ENV
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      - name: Build Docker Image
+        run: |
+          docker build \
+          --build-arg BUILD_HASH=$SHORT_SHA \
+          -f Dockerfile.production \
+          -t ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_REGISTRY_USERNAME }}/serambi-kami:$VERSION \
+          -t ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_REGISTRY_USERNAME }}/serambi-kami:latest \
+          .
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_REGISTRY_USERNAME }}/serambi-kami:$VERSION
+          docker push ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_REGISTRY_USERNAME }}/serambi-kami:latest
