@@ -1,21 +1,30 @@
 import { createTeam, getTeams } from "@/api/Team";
 import FormCreateTeam from "@/components/team/FormCreateTeam";
 import TeamItem from "@/components/team/TeamItem";
+import TeamSkeletonItem from "@/components/team/TeamSkeletonItem";
 import { useAuth } from "@/hooks/useAuth";
 import { Team } from "@/types/Team";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Modal, notification } from "antd";
+import { Button, Empty, Form, Modal, notification } from "antd";
 import { useCallback, useEffect, useState } from "react";
 
 const TeamPage = () => {
   const [teams, setTeams] = useState<Team[]>([]);
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
   const { user } = useAuth();
   const fetchTeams = useCallback(async () => {
-    const data = await getTeams("all");
-    setTeams(data);
+    try {
+      setIsLoading(true);
+      const data = await getTeams("all");
+      setTeams(data);
+    } catch (e) {
+      console.error("An error occurred: ", e);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -59,15 +68,25 @@ const TeamPage = () => {
             </Button>
           </div>
         )}
-
-        <div className="my-5 flex-1 grid gap-5 xl:grid-cols-5 md:grid-cols-4 grid-cols-2 auto-rows-min">
-          {teams.map((team, index) => {
-            return (
-              <TeamItem onItemUpdated={fetchTeams} team={team} key={index} />
-            );
-          })}
-        </div>
+        {isLoading ? (
+          <div className="my-5 flex-1 grid gap-5 xl:grid-cols-5 md:grid-cols-4 grid-cols-2 auto-rows-min">
+            {[...Array(5)].map((_item, index) => (
+              <TeamSkeletonItem key={index} />
+            ))}
+          </div>
+        ) : teams.length > 0 ? (
+          <div className="my-5 flex-1 grid gap-5 xl:grid-cols-5 md:grid-cols-4 grid-cols-2 auto-rows-min">
+            {teams.map((team, index) => {
+              return (
+                <TeamItem onItemUpdated={fetchTeams} team={team} key={index} />
+              );
+            })}
+          </div>
+        ) : (
+          <Empty className="my-5 flex-1 content-center"></Empty>
+        )}
       </div>
+
       <Modal
         title={`Buat Tim`}
         open={open}
