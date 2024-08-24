@@ -48,11 +48,20 @@ const CreateServicePage = () => {
   const onFinish = async (values: any) => {
     try {
       setIsLoading(true);
-      const { image, username, password, note, hasSso, teams, ...payload } =
-        values;
+      const {
+        image,
+        username,
+        password,
+        note,
+        hasSso,
+        teams,
+        tags,
+        ...payload
+      } = values;
 
       await createService({
         ...payload,
+        tags: tags ?? [],
         teams: teams.map((team: string) => {
           return {
             teamId: team,
