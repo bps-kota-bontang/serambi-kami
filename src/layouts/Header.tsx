@@ -2,6 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { protectedRoutes } from "@/routes/ProtectedRoute";
 import { createBreadcrumbItems } from "@/utils/Breadcrumb";
+import { getInitials } from "@/utils/String";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, Layout, MenuProps, Breadcrumb, Button } from "antd";
 import { forwardRef } from "react";
@@ -63,7 +64,9 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(
           <span className="text-md">{!isMobile ? user?.name : null}</span>
 
           <Dropdown menu={{ items }}>
-            <Avatar src={"/serambi-logo.png"} />
+            <Avatar style={{ backgroundColor: "#f56a00" }}>
+              {user?.name ? getInitials(user.name) : "😸"}
+            </Avatar>
           </Dropdown>
         </Layout.Header>
         <Breadcrumb className="p-3" items={breadcrumbItems} />

@@ -85,7 +85,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
               items: [
                 {
                   key: "add",
-                  label: "Tambah",
+                  label: "Ubah",
                   onClick: () => {
                     const memberIds = team.users.map((item) => item.user.id);
 
@@ -105,8 +105,8 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
                       maskClosable: true,
                       closable: true,
                       okCancel: true,
-                      title: `Hapus Layanan: ${team.name}`,
-                      content: "Apakah Anda yakin ingin menghapus layanan ini?",
+                      title: `Hapus Tim: ${team.name}`,
+                      content: "Apakah Anda yakin ingin menghapus tim ini?",
                       cancelText: "Batal",
                       okText: "Hapus",
                       onOk: () => handleDeleteService(team.id),
@@ -144,7 +144,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
       </div>
 
       <Modal
-        title={`Tambah Anggota ${team.name}`}
+        title={`Ubah Anggota ${team.name}`}
         open={open}
         onOk={form.submit}
         maskClosable={false}

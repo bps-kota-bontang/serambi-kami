@@ -24,22 +24,28 @@ const FormCredentialService = ({ credential }: FormCredentialServiceProps) => {
   return (
     <div className="flex flex-col gap-3">
       {credential.username && (
-        <Space.Compact>
-          <Input value={credential.username} type={"password"} disabled />
-          <Button
-            onClick={() => handleCopy(credential.username)}
-            icon={<CopyOutlined />}
-          />
-        </Space.Compact>
+        <>
+          <span className="text-sm">Nama Pengguna</span>
+          <Space.Compact>
+            <Input.Password value={credential.username} />
+            <Button
+              onClick={() => handleCopy(credential.username)}
+              icon={<CopyOutlined />}
+            />
+          </Space.Compact>
+        </>
       )}
       {credential.password && (
-        <Space.Compact>
-          <Input value={credential.password} type={"password"} disabled />
-          <Button
-            onClick={() => handleCopy(credential.password)}
-            icon={<CopyOutlined />}
-          />
-        </Space.Compact>
+        <>
+          <span className="text-sm">Kata Sandi</span>
+          <Space.Compact>
+            <Input.Password value={credential.password} />
+            <Button
+              onClick={() => handleCopy(credential.password)}
+              icon={<CopyOutlined />}
+            />
+          </Space.Compact>
+        </>
       )}
       <span className="italic">
         {credential.hasSso ? (
