@@ -4,6 +4,7 @@ import { MoreOutlined } from "@ant-design/icons";
 import { Button, Image, App, Dropdown } from "antd";
 import { useNavigate } from "react-router-dom";
 import FormCredentialService from "@/components/service/FormCredentialService";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface ServiceItemProps {
   service: Service;
@@ -12,6 +13,7 @@ interface ServiceItemProps {
 
 const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
   const { modal, notification } = App.useApp();
+  const isMobile = useMediaQuery();
   const navigate = useNavigate();
 
   const handleDeleteService = async (id: string) => {
@@ -63,7 +65,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
   };
 
   return (
-    <div className="bg-white rounded-md drop-shadow-md p-5 gap-2 flex flex-col ">
+    <div className="relative bg-white rounded-md drop-shadow-md p-5 gap-2 flex flex-col ">
       <Dropdown
         menu={{
           items: [
@@ -100,7 +102,12 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
         />
       </Dropdown>
       <div>
-        <Image preview={false} height={48} src={service.imageUrl} />
+        <Image
+          preview={false}
+          height={isMobile ? undefined : 48}
+          width={isMobile ? 48 : undefined}
+          src={service.imageUrl}
+        />
       </div>
       <div className="flex flex-col justify-center flex-1">
         <div className="text-lg text-black font-semibold">{service.name}</div>
@@ -112,7 +119,9 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
             Lihat
           </Button>
           {service.credential && (
-            <Button onClick={showModal}>Tampilkan Kredensial</Button>
+            <Button onClick={showModal}>
+              {isMobile ? "Kredensial" : "Tampilkan Kredensial"}
+            </Button>
           )}
         </div>
       </div>

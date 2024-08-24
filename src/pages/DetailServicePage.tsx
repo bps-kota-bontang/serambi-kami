@@ -1,6 +1,7 @@
 import { getService, getServiceTags, updateService } from "@/api/Service";
 import { getTeams } from "@/api/Team";
 import { API_BASE_URL } from "@/configs/Constant";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Service } from "@/types/Service";
 import { Team } from "@/types/Team";
 import {
@@ -28,6 +29,7 @@ const DetailServicePage = () => {
   const [labels, setLables] = useState<SelectProps["options"]>([]);
   const [teams, setTeams] = useState<SelectProps["options"]>([]);
   const [form] = Form.useForm();
+  const isMobile = useMediaQuery();
 
   useEffect(() => {
     const fetchService = async () => {
@@ -139,7 +141,7 @@ const DetailServicePage = () => {
         <Card>
           <Card.Grid
             style={{
-              width: "50%",
+              width: isMobile ? "100%" : "50%",
             }}
             hoverable={false}
           >
@@ -239,7 +241,7 @@ const DetailServicePage = () => {
               >
                 <Image
                   preview={false}
-                  height={48}
+                  width={48}
                   alt="Foto layanan"
                   src={imageUrl}
                 />
@@ -248,7 +250,7 @@ const DetailServicePage = () => {
           </Card.Grid>
           <Card.Grid
             style={{
-              width: "50%",
+              width: isMobile ? "100%" : "50%",
             }}
             hoverable={false}
           >

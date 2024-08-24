@@ -1,6 +1,7 @@
 import { getServices, getServiceTags } from "@/api/Service";
 import ServiceItem from "@/components/service/ServiceItem";
 import ServiceSkeletonItem from "@/components/service/ServiceSkeletonItem";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Service } from "@/types/Service";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Empty, Input, Pagination, Select, SelectProps } from "antd";
@@ -19,6 +20,7 @@ const ServicePage = () => {
   const navigate = useNavigate();
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [searchParams] = useSearchParams();
+  const isMobile = useMediaQuery();
 
   useEffect(() => {
     const initialKeyword = searchParams.get("keyword") || "";
@@ -128,7 +130,9 @@ const ServicePage = () => {
                 setPage(page);
                 setLimit(pageSize);
               }}
-              showTotal={(total) => `Total ${total} items`}
+              showTotal={
+                isMobile ? undefined : (total) => `Total ${total} items`
+              }
             />
           </>
         ) : (

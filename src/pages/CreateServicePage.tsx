@@ -1,6 +1,7 @@
 import { createService, getServiceTags } from "@/api/Service";
 import { getTeams } from "@/api/Team";
 import { API_BASE_URL } from "@/configs/Constant";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Team } from "@/types/Team";
 import { UploadOutlined } from "@ant-design/icons";
 import {
@@ -22,6 +23,7 @@ const CreateServicePage = () => {
   const [labels, setLables] = useState<SelectProps["options"]>([]);
   const [teams, setTeams] = useState<SelectProps["options"]>([]);
   const [form] = Form.useForm();
+  const isMobile = useMediaQuery();
 
   useEffect(() => {
     const fetchServiceTags = async () => {
@@ -99,7 +101,7 @@ const CreateServicePage = () => {
         <Card>
           <Card.Grid
             style={{
-              width: "50%",
+              width: isMobile ? "100%" : "50%",
             }}
             hoverable={false}
           >
@@ -203,7 +205,7 @@ const CreateServicePage = () => {
           </Card.Grid>
           <Card.Grid
             style={{
-              width: "50%",
+              width: isMobile ? "100%" : "50%",
             }}
             hoverable={false}
           >

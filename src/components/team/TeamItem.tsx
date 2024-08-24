@@ -78,7 +78,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
 
   return (
     <>
-      <div className="bg-white rounded-md drop-shadow-md p-5 gap-2 flex flex-col ">
+      <div className="relative bg-white rounded-md drop-shadow-md p-5 gap-2 flex flex-col ">
         {isAdmin || user?.isSuper ? (
           <Dropdown
             menu={{

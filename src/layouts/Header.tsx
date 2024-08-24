@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { protectedRoutes } from "@/routes/ProtectedRoute";
 import { createBreadcrumbItems } from "@/utils/Breadcrumb";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
@@ -15,6 +16,7 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(
   ({ collapsed, setCollapsed }, ref) => {
     const { user, logout } = useAuth();
     const { pathname } = useLocation();
+    const isMobile = useMediaQuery();
 
     const pathnames = pathname
       .toLowerCase()
@@ -58,7 +60,7 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(
           />
           <div className="flex-1" />
 
-          <span className="text-md">{user?.name}</span>
+          <span className="text-md">{!isMobile ? user?.name : null}</span>
 
           <Dropdown menu={{ items }}>
             <Avatar src={"/serambi-logo.png"} />
