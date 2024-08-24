@@ -158,12 +158,12 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
       <div>
         <Image preview={false} height={48} src={service.imageUrl} />
       </div>
-      <div className="flex flex-col justify-center ">
+      <div className="flex flex-col justify-center flex-1">
         <div className="text-lg text-black font-semibold">{service.name}</div>
-        <div className="text-sm text-gray-500 line-clamp-2">
+        <div className="text-sm text-gray-500 line-clamp-2 mb-5">
           {service.description}
         </div>
-        <div className="mt-5 flex flex-col gap-2">
+        <div className=" flex flex-col gap-2 mt-auto">
           <Button type="primary" onClick={() => handleClick(service.link)}>
             Lihat
           </Button>
