@@ -27,7 +27,7 @@ const FormCredentialService = ({ credential }: FormCredentialServiceProps) => {
         <Space.Compact>
           <Input value={credential.username} type={"password"} disabled />
           <Button
-            onClick={() => handleCopy(credential.password)}
+            onClick={() => handleCopy(credential.username)}
             icon={<CopyOutlined />}
           />
         </Space.Compact>
