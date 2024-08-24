@@ -8,6 +8,8 @@ import { APP_NAME } from "@/configs/Constant";
 
 const DashboardLayout: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+
   const sidebarRef = useRef(null);
   const headerRef = useRef(null);
 
@@ -51,9 +53,9 @@ const DashboardLayout: React.FC = () => {
 
   return (
     <Layout className="min-h-screen">
-      <Sidebar ref={sidebarRef} />
+      <Sidebar ref={sidebarRef} collapsed={collapsed} setCollapsed={setCollapsed} />
       <Layout>
-        <Header ref={headerRef} />
+        <Header ref={headerRef} collapsed={collapsed} setCollapsed={setCollapsed} />
         <Layout.Content>
           <Outlet />
         </Layout.Content>
