@@ -21,6 +21,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const DetailServicePage = () => {
   const { serviceId } = useParams();
   const navigate = useNavigate();
+  const [isloading, setIsLoading] = useState(false);
   const { notification, message } = App.useApp();
   const [service, setService] = useState<Service>();
   const [imageUrl, setImageUrl] = useState<string>();
@@ -91,6 +92,7 @@ const DetailServicePage = () => {
 
   const onFinish = async (values: any) => {
     try {
+      setIsLoading(true);
       const { image, username, password, note, hasSso, teams, ...payload } =
         values;
 
@@ -126,6 +128,8 @@ const DetailServicePage = () => {
         description:
           "Terjadi kesalahan saat memperbarui layanan. Silakan coba lagi.",
       });
+    } finally{
+      setIsLoading(false);
     }
   };
 
@@ -283,7 +287,7 @@ const DetailServicePage = () => {
               <Checkbox>Apakah tersedia Single Sign On?</Checkbox>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button loading={isloading} type="primary" htmlType="submit">
                 Perbarui
               </Button>
             </Form.Item>

@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 
 const CreateServicePage = () => {
   const { notification, message } = App.useApp();
+  const [isLoading, setIsLoading] = useState(false);
   const [labels, setLables] = useState<SelectProps["options"]>([]);
   const [teams, setTeams] = useState<SelectProps["options"]>([]);
   const [form] = Form.useForm();
@@ -46,6 +47,7 @@ const CreateServicePage = () => {
 
   const onFinish = async (values: any) => {
     try {
+      setIsLoading(true);
       const { image, username, password, note, hasSso, teams, ...payload } =
         values;
 
@@ -77,6 +79,8 @@ const CreateServicePage = () => {
         description:
           "Terjadi kesalahan saat menambahkan layanan. Silakan coba lagi.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -229,7 +233,7 @@ const CreateServicePage = () => {
               <Checkbox>Apakah tersedia Single Sign On?</Checkbox>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" loading={isLoading}>
                 Tambah
               </Button>
             </Form.Item>
