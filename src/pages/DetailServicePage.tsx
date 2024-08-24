@@ -128,7 +128,7 @@ const DetailServicePage = () => {
         description:
           "Terjadi kesalahan saat memperbarui layanan. Silakan coba lagi.",
       });
-    } finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -201,18 +201,7 @@ const DetailServicePage = () => {
                 options={teams}
               />
             </Form.Item>
-            <Form.Item
-              label="Label Layanan"
-              name={"tags"}
-              required
-              tooltip="Label wajib diisi"
-              rules={[
-                {
-                  required: true,
-                  message: "Silahkan masukan label",
-                },
-              ]}
-            >
+            <Form.Item label="Label Layanan" name={"tags"}>
               <Select
                 mode="tags"
                 allowClear

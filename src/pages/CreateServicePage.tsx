@@ -152,18 +152,7 @@ const CreateServicePage = () => {
                 options={teams}
               />
             </Form.Item>
-            <Form.Item
-              label="Label Layanan"
-              name={"tags"}
-              required
-              tooltip="Label wajib diisi"
-              rules={[
-                {
-                  required: true,
-                  message: "Silahkan masukan label",
-                },
-              ]}
-            >
+            <Form.Item label="Label Layanan" name={"tags"}>
               <Select
                 mode="tags"
                 allowClear
