@@ -59,3 +59,16 @@ export const createTeam = async (data: any) => {
 
   return result.data;
 };
+
+
+export const deleteTeam = async (id: string) => {
+  const response = await fetch(`${API_BASE_URL}/v1/teams/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const result = await response.json();
+    throw new Error(result.message);
+  }
+};

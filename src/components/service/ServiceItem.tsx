@@ -143,7 +143,18 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
               key: "delete",
               label: "Hapus",
               danger: true,
-              onClick: () => handleDeleteService(service.id),
+              onClick: () => {
+                modal.error({
+                  maskClosable: true,
+                  closable: true,
+                  okCancel: true,
+                  title: `Hapus Layanan: ${service.name}`,
+                  content: "Apakah Anda yakin ingin menghapus layanan ini?",
+                  cancelText: "Batal",
+                  okText: "Hapus",
+                  onOk: () => handleDeleteService(service.id),
+                });
+              },
             },
           ],
         }}

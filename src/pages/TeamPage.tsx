@@ -78,7 +78,12 @@ const TeamPage = () => {
           <div className="my-5 flex-1 grid gap-5 xl:grid-cols-5 md:grid-cols-4 grid-cols-2 auto-rows-min">
             {teams.map((team, index) => {
               return (
-                <TeamItem onItemUpdated={fetchTeams} team={team} key={index} />
+                <TeamItem
+                  onItemDeleted={fetchTeams}
+                  onItemUpdated={fetchTeams}
+                  team={team}
+                  key={index}
+                />
               );
             })}
           </div>

@@ -1,4 +1,4 @@
-import { updateTeamUsers } from "@/api/Team";
+import { deleteTeam, updateTeamUsers } from "@/api/Team";
 import { useAuth } from "@/hooks/useAuth";
 import { Team } from "@/types/Team";
 import { getInitials } from "@/utils/String";
@@ -19,15 +19,33 @@ import FormUpdateTeam from "@/components/team/FormUpdateTeam";
 interface TeamItemProps {
   team: Team;
   onItemUpdated: () => void;
+  onItemDeleted: () => void;
 }
 
-const TeamItem = ({ team, onItemUpdated }: TeamItemProps) => {
-  const { notification } = App.useApp();
+const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
+  const { notification, modal } = App.useApp();
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
   const isAdmin = team.users.find((item) => item.user.id === user?.id)?.isAdmin;
+
+  const handleDeleteService = async (id: string) => {
+    try {
+      await deleteTeam(id);
+      notification.success({
+        message: "Berhasil Menghapus Tim",
+        description: "Tim berhasil dihapus",
+      });
+      onItemDeleted();
+    } catch (error) {
+      console.error(error);
+      notification.error({
+        message: "Terjadi Kesalahan",
+        description: "Gagal menghapus tim",
+      });
+    }
+  };
 
   const onSubmit = async (values: any) => {
     try {
@@ -81,7 +99,19 @@ const TeamItem = ({ team, onItemUpdated }: TeamItemProps) => {
                   key: "delete",
                   label: "Hapus",
                   danger: true,
-                  disabled: isAdmin
+                  disabled: isAdmin,
+                  onClick: () => {
+                    modal.error({
+                      maskClosable: true,
+                      closable: true,
+                      okCancel: true,
+                      title: `Hapus Layanan: ${team.name}`,
+                      content: "Apakah Anda yakin ingin menghapus layanan ini?",
+                      cancelText: "Batal",
+                      okText: "Hapus",
+                      onOk: () => handleDeleteService(team.id),
+                    });
+                  },
                 },
               ],
             }}
@@ -96,9 +126,7 @@ const TeamItem = ({ team, onItemUpdated }: TeamItemProps) => {
         ) : null}
 
         <div className="flex flex-col justify-center gap-3 mr-10">
-          <div className="text-lg text-black font-semibold">
-            {team.name}
-          </div>
+          <div className="text-lg text-black font-semibold">{team.name}</div>
           <Avatar.Group>
             {team.users.map((item, index) => {
               return (
