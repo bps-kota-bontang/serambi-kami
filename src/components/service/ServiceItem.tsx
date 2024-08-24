@@ -1,59 +1,17 @@
 import { deleteService, getService } from "@/api/Service";
 import { Service } from "@/types/Service";
-import {
-  CheckCircleTwoTone,
-  CloseCircleTwoTone,
-  CopyOutlined,
-  MoreOutlined,
-} from "@ant-design/icons";
-import { Button, Image, Input, message, App, Space, Dropdown } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
+import { Button, Image, App, Dropdown } from "antd";
 import { useNavigate } from "react-router-dom";
+import FormCredentialService from "@/components/service/FormCredentialService";
 
 interface ServiceItemProps {
   service: Service;
   onItemDeleted: () => void;
 }
 
-const handleClick = (link: string) => {
-  window.open(link, "_blank");
-};
-
-const handleCopy = (text?: string) => {
-  if (!text) return;
-  navigator.clipboard.writeText(text).then(() => {
-    message.success({
-      content: "Kredensial berhasil disalin",
-    });
-  });
-};
-
-const CredentialField = ({
-  label,
-  value,
-}: {
-  label: string;
-  value?: string;
-}) => (
-  <Space.Compact>
-    <Input
-      value={value}
-      type={label === "password" ? "password" : "text"}
-      disabled
-    />
-    <Button
-      onClick={(event) => {
-        event.stopPropagation();
-        handleCopy(value);
-      }}
-      icon={<CopyOutlined />}
-      aria-label={`Copy service ${label}`}
-    />
-  </Space.Compact>
-);
-
 const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
   const { modal, notification } = App.useApp();
-
   const navigate = useNavigate();
 
   const handleDeleteService = async (id: string) => {
@@ -73,6 +31,10 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
     }
   };
 
+  const handleClick = (link: string) => {
+    window.open(link, "_blank");
+  };
+
   const showModal = async () => {
     try {
       const serviceDetail = await getService(service.id);
@@ -86,36 +48,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
         closable: true,
         okCancel: true,
         title: `Kredensial Layanan: ${service.name}`,
-        content: (
-          <div className="flex flex-col gap-3">
-            {credential.username && (
-              <CredentialField label="username" value={credential.username} />
-            )}
-            {credential.password && (
-              <CredentialField label="password" value={credential.password} />
-            )}
-            <span className="italic">
-              {credential.hasSso ? (
-                <>
-                  <CheckCircleTwoTone
-                    twoToneColor={"#52c41a"}
-                    className="mr-1"
-                  />
-                  Tersedia Single Sign On
-                </>
-              ) : (
-                <>
-                  <CloseCircleTwoTone
-                    twoToneColor={"#ff4d4f"}
-                    className="mr-1"
-                  />
-                  Tidak Tersedia Single Sign On
-                </>
-              )}
-            </span>
-            <span className="italic">Catatan: {credential.note ?? "-"}</span>
-          </div>
-        ),
+        content: <FormCredentialService credential={credential} />,
         cancelText: "Tutup",
         okText: "Lihat",
         onOk: () => handleClick(service.link),
