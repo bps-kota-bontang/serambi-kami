@@ -98,14 +98,14 @@ const ServicePage = () => {
 
       <>
         {isLoading ? (
-          <div className="my-5 flex-1 grid gap-5 xl:grid-cols-5 md:grid-cols-4 grid-cols-2 auto-rows-min">
+          <div className="my-5 flex-1 grid gap-5 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 auto-rows-min">
             {[...Array(limit / 2)].map((_item, index) => (
               <ServiceSkeletonItem key={index} />
             ))}
           </div>
         ) : services.length > 0 ? (
           <>
-            <div className="my-5 flex-1 grid gap-5 xl:grid-cols-5 md:grid-cols-4 grid-cols-2 auto-rows-min">
+            <div className="my-5 flex-1 grid gap-5 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 auto-rows-min">
               {services.map((item: Service, index: number) => {
                 return (
                   <ServiceItem

@@ -70,13 +70,13 @@ const TeamPage = () => {
           </div>
         )}
         {isLoading ? (
-          <div className="my-5 flex-1 grid gap-5 xl:grid-cols-5 md:grid-cols-4 grid-cols-2 auto-rows-min">
+          <div className="my-5 flex-1 grid gap-5 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 auto-rows-min">
             {[...Array(5)].map((_item, index) => (
               <TeamSkeletonItem key={index} />
             ))}
           </div>
         ) : teams.length > 0 ? (
-          <div className="my-5 flex-1 grid gap-5 xl:grid-cols-5 md:grid-cols-4 grid-cols-2 auto-rows-min">
+          <div className="my-5 flex-1 grid gap-5 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 auto-rows-min">
             {teams.map((team, index) => {
               return (
                 <TeamItem
