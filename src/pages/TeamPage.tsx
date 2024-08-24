@@ -5,7 +5,7 @@ import TeamSkeletonItem from "@/components/team/TeamSkeletonItem";
 import { useAuth } from "@/hooks/useAuth";
 import { Team } from "@/types/Team";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Empty, Form, Modal, notification } from "antd";
+import { App, Button, Empty, Form, Modal } from "antd";
 import { useCallback, useEffect, useState } from "react";
 
 const TeamPage = () => {
@@ -15,6 +15,7 @@ const TeamPage = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
   const { user } = useAuth();
+  const { notification } = App.useApp();
   const fetchTeams = useCallback(async () => {
     try {
       setIsLoading(true);
