@@ -25,9 +25,9 @@ const useServices = (
         setServices(data.services);
         setTotal(data.total);
         setError(null);
-      } catch (e) {
+      } catch (error) {
         setError("An error occurred while fetching services.");
-        console.error("An error occurred: ", e);
+        console.error("An error occurred: ", error);
       } finally {
         setIsLoading(false);
       }

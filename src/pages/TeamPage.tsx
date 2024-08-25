@@ -21,8 +21,8 @@ const TeamPage = () => {
       setIsLoading(true);
       const data = await getTeams("all");
       setTeams(data);
-    } catch (e) {
-      console.error("An error occurred: ", e);
+    } catch (error) {
+      console.error("An error occurred: ", error);
     } finally {
       setIsLoading(false);
     }

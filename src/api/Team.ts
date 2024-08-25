@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "@/configs/Constant";
+import { handleResponse } from "@/utils/Response";
 
 export const getTeams = async (type?: string) => {
   const queryParams = new URLSearchParams();
@@ -13,13 +14,7 @@ export const getTeams = async (type?: string) => {
     }
   );
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data;
+  return await handleResponse(response);
 };
 
 export const updateTeamUsers = async (teamId: string, data: any) => {
@@ -32,13 +27,7 @@ export const updateTeamUsers = async (teamId: string, data: any) => {
     credentials: "include",
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data;
+  return await handleResponse(response);
 };
 
 export const createTeam = async (data: any) => {
@@ -51,15 +40,8 @@ export const createTeam = async (data: any) => {
     credentials: "include",
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data;
+  return await handleResponse(response);
 };
-
 
 export const deleteTeam = async (id: string) => {
   const response = await fetch(`${API_BASE_URL}/v1/teams/${id}`, {
@@ -67,8 +49,5 @@ export const deleteTeam = async (id: string) => {
     credentials: "include",
   });
 
-  if (!response.ok) {
-    const result = await response.json();
-    throw new Error(result.message);
-  }
+  await handleResponse(response);
 };

@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "@/configs/Constant";
+import { handleResponse } from "@/utils/Response";
 
 export const login = async (email: string, password: string) => {
   const response = await fetch(`${API_BASE_URL}/v1/auth/login`, {
@@ -11,11 +12,5 @@ export const login = async (email: string, password: string) => {
     body: JSON.stringify({ email, password }),
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data;
+  return await handleResponse(response);
 };
