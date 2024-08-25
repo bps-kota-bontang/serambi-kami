@@ -124,7 +124,7 @@ const ServicePage = () => {
               showSizeChanger
               defaultPageSize={1}
               pageSize={limit}
-              pageSizeOptions={[10, 25, 50, 100]}
+              pageSizeOptions={[10, 20, 50, 100]}
               showQuickJumper
               onChange={(page, pageSize) => {
                 setPage(page);
