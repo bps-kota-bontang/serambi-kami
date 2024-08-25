@@ -1,6 +1,7 @@
 import { getService, getServiceTags, updateService } from "@/api/Service";
 import { getTeams } from "@/api/Team";
 import { API_BASE_URL } from "@/configs/Constant";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Service } from "@/types/Service";
 import { Team } from "@/types/Team";
 import {
@@ -21,12 +22,14 @@ import { useNavigate, useParams } from "react-router-dom";
 const DetailServicePage = () => {
   const { serviceId } = useParams();
   const navigate = useNavigate();
+  const [isloading, setIsLoading] = useState(false);
   const { notification, message } = App.useApp();
   const [service, setService] = useState<Service>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [labels, setLables] = useState<SelectProps["options"]>([]);
   const [teams, setTeams] = useState<SelectProps["options"]>([]);
   const [form] = Form.useForm();
+  const isMobile = useMediaQuery();
 
   useEffect(() => {
     const fetchService = async () => {
@@ -35,7 +38,7 @@ const DetailServicePage = () => {
           const data = await getService(serviceId);
           setService(data);
         } catch (error) {
-          console.log("An error occurred: ", error);
+          console.error("An error occurred: ", error);
           navigate("/services");
           notification.error({
             message: "Gagal mendapatkan informasi layanan",
@@ -91,6 +94,7 @@ const DetailServicePage = () => {
 
   const onFinish = async (values: any) => {
     try {
+      setIsLoading(true);
       const { image, username, password, note, hasSso, teams, ...payload } =
         values;
 
@@ -126,6 +130,8 @@ const DetailServicePage = () => {
         description:
           "Terjadi kesalahan saat memperbarui layanan. Silakan coba lagi.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -135,7 +141,7 @@ const DetailServicePage = () => {
         <Card>
           <Card.Grid
             style={{
-              width: "50%",
+              width: isMobile ? "100%" : "50%",
             }}
             hoverable={false}
           >
@@ -197,18 +203,7 @@ const DetailServicePage = () => {
                 options={teams}
               />
             </Form.Item>
-            <Form.Item
-              label="Label Layanan"
-              name={"tags"}
-              required
-              tooltip="Label wajib diisi"
-              rules={[
-                {
-                  required: true,
-                  message: "Silahkan masukan label",
-                },
-              ]}
-            >
+            <Form.Item label="Label Layanan" name={"tags"}>
               <Select
                 mode="tags"
                 allowClear
@@ -230,7 +225,7 @@ const DetailServicePage = () => {
                 maxCount={1}
                 onChange={(info) => {
                   if (info.file.status !== "uploading") {
-                    console.log(info.file, info.fileList);
+                    //console.log(info.file, info.fileList);
                   }
                   if (info.file.status === "done") {
                     const imageUrl = info.file.response.data.imageUrl;
@@ -246,7 +241,7 @@ const DetailServicePage = () => {
               >
                 <Image
                   preview={false}
-                  height={48}
+                  width={48}
                   alt="Foto layanan"
                   src={imageUrl}
                 />
@@ -255,7 +250,7 @@ const DetailServicePage = () => {
           </Card.Grid>
           <Card.Grid
             style={{
-              width: "50%",
+              width: isMobile ? "100%" : "50%",
             }}
             hoverable={false}
           >
@@ -283,7 +278,7 @@ const DetailServicePage = () => {
               <Checkbox>Apakah tersedia Single Sign On?</Checkbox>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button loading={isloading} type="primary" htmlType="submit">
                 Perbarui
               </Button>
             </Form.Item>

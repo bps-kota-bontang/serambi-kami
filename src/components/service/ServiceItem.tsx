@@ -1,59 +1,19 @@
 import { deleteService, getService } from "@/api/Service";
 import { Service } from "@/types/Service";
-import {
-  CheckCircleTwoTone,
-  CloseCircleTwoTone,
-  CopyOutlined,
-  MoreOutlined,
-} from "@ant-design/icons";
-import { Button, Image, Input, message, App, Space, Dropdown } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
+import { Button, Image, App, Dropdown } from "antd";
 import { useNavigate } from "react-router-dom";
+import FormCredentialService from "@/components/service/FormCredentialService";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface ServiceItemProps {
   service: Service;
   onItemDeleted: () => void;
 }
 
-const handleClick = (link: string) => {
-  window.open(link, "_blank");
-};
-
-const handleCopy = (text?: string) => {
-  if (!text) return;
-  navigator.clipboard.writeText(text).then(() => {
-    message.success({
-      content: "Kredensial berhasil disalin",
-    });
-  });
-};
-
-const CredentialField = ({
-  label,
-  value,
-}: {
-  label: string;
-  value?: string;
-}) => (
-  <Space.Compact>
-    <Input
-      value={value}
-      type={label === "password" ? "password" : "text"}
-      disabled
-    />
-    <Button
-      onClick={(event) => {
-        event.stopPropagation();
-        handleCopy(value);
-      }}
-      icon={<CopyOutlined />}
-      aria-label={`Copy service ${label}`}
-    />
-  </Space.Compact>
-);
-
 const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
   const { modal, notification } = App.useApp();
-
+  const isMobile = useMediaQuery();
   const navigate = useNavigate();
 
   const handleDeleteService = async (id: string) => {
@@ -73,6 +33,10 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
     }
   };
 
+  const handleClick = (link: string) => {
+    window.open(link, "_blank");
+  };
+
   const showModal = async () => {
     try {
       const serviceDetail = await getService(service.id);
@@ -86,36 +50,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
         closable: true,
         okCancel: true,
         title: `Kredensial Layanan: ${service.name}`,
-        content: (
-          <div className="flex flex-col gap-3">
-            {credential.username && (
-              <CredentialField label="username" value={credential.username} />
-            )}
-            {credential.password && (
-              <CredentialField label="password" value={credential.password} />
-            )}
-            <span className="italic">
-              {credential.hasSso ? (
-                <>
-                  <CheckCircleTwoTone
-                    twoToneColor={"#52c41a"}
-                    className="mr-1"
-                  />
-                  Tersedia Single Sign On
-                </>
-              ) : (
-                <>
-                  <CloseCircleTwoTone
-                    twoToneColor={"#ff4d4f"}
-                    className="mr-1"
-                  />
-                  Tidak Tersedia Single Sign On
-                </>
-              )}
-            </span>
-            <span className="italic">Catatan: {credential.note ?? "-"}</span>
-          </div>
-        ),
+        content: <FormCredentialService credential={credential} />,
         cancelText: "Tutup",
         okText: "Lihat",
         onOk: () => handleClick(service.link),
@@ -130,7 +65,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
   };
 
   return (
-    <div className="bg-white rounded-md drop-shadow-md p-5 gap-2 flex flex-col ">
+    <div className="relative bg-white rounded-md drop-shadow-md p-5 gap-2 flex flex-col ">
       <Dropdown
         menu={{
           items: [
@@ -143,7 +78,18 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
               key: "delete",
               label: "Hapus",
               danger: true,
-              onClick: () => handleDeleteService(service.id),
+              onClick: () => {
+                modal.error({
+                  maskClosable: true,
+                  closable: true,
+                  okCancel: true,
+                  title: `Hapus Layanan: ${service.name}`,
+                  content: "Apakah Anda yakin ingin menghapus layanan ini?",
+                  cancelText: "Batal",
+                  okText: "Hapus",
+                  onOk: () => handleDeleteService(service.id),
+                });
+              },
             },
           ],
         }}
@@ -156,19 +102,26 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
         />
       </Dropdown>
       <div>
-        <Image preview={false} height={48} src={service.imageUrl} />
+        <Image
+          preview={false}
+          height={isMobile ? undefined : 48}
+          width={isMobile ? 48 : undefined}
+          src={service.imageUrl}
+        />
       </div>
-      <div className="flex flex-col justify-center ">
+      <div className="flex flex-col justify-center flex-1">
         <div className="text-lg text-black font-semibold">{service.name}</div>
-        <div className="text-sm text-gray-500 line-clamp-2">
+        <div className="text-sm text-gray-500 line-clamp-2 mb-5">
           {service.description}
         </div>
-        <div className="mt-5 flex flex-col gap-2">
+        <div className=" flex flex-col gap-2 mt-auto">
           <Button type="primary" onClick={() => handleClick(service.link)}>
             Lihat
           </Button>
           {service.credential && (
-            <Button onClick={showModal}>Tampilkan Kredensial</Button>
+            <Button onClick={showModal}>
+              {isMobile ? "Kredensial" : "Tampilkan Kredensial"}
+            </Button>
           )}
         </div>
       </div>

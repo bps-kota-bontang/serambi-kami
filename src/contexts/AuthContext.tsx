@@ -14,6 +14,7 @@ interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  isLoading: boolean;
 }
 
 type AuthProviderProps = {
@@ -33,29 +34,38 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] =
     useState<boolean>(getInitialAuthState);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    localStorage.setItem("isAuthenticated", JSON.stringify(isAuthenticated));
+    if (isAuthenticated) {
+      localStorage.setItem("isAuthenticated", JSON.stringify(isAuthenticated));
+    } else {
+      localStorage.removeItem("isAuthenticated");
+    }
   }, [isAuthenticated]);
 
   useEffect(() => {
     if (isAuthenticated) {
       const fetchUser = async () => {
         try {
+          setIsLoading(true);
           const data = await me();
+          setIsAuthenticated(true);
           setUser(data);
         } catch (error) {
           console.error("Failed to fetch user data:", error);
           setIsAuthenticated(false);
           setUser(null);
+        } finally {
+          setIsLoading(false);
         }
       };
 
       fetchUser();
     } else {
-      setUser(null);
+      setIsLoading(false);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated]); // Dependencies are correctly managed
 
   const login = useCallback(async (email: string, password: string) => {
     try {
@@ -64,9 +74,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsAuthenticated(true);
       setUser(data);
     } catch (error) {
+      console.error(
+        "Login failed:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
       setIsAuthenticated(false);
       setUser(null);
-      throw new Error(error instanceof Error ? error.message : "Unknown error");
+      throw error;
     }
   }, []);
 
@@ -77,7 +91,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, login, logout, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

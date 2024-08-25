@@ -1,8 +1,10 @@
 import { getServices, getServiceTags } from "@/api/Service";
 import ServiceItem from "@/components/service/ServiceItem";
+import ServiceSkeletonItem from "@/components/service/ServiceSkeletonItem";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Service } from "@/types/Service";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Input, Pagination, Select, SelectProps } from "antd";
+import { Button, Empty, Input, Pagination, Select, SelectProps } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -14,9 +16,11 @@ const ServicePage = () => {
   const [limit, setLimit] = useState<number>(10);
   const [tags, setTags] = useState<string[]>([]);
   const [options, setOptions] = useState<SelectProps["options"]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [searchParams] = useSearchParams();
+  const isMobile = useMediaQuery();
 
   useEffect(() => {
     const initialKeyword = searchParams.get("keyword") || "";
@@ -46,9 +50,16 @@ const ServicePage = () => {
       clearTimeout(debounceTimeout.current);
     }
     debounceTimeout.current = setTimeout(async () => {
-      const data = await getServices(keyword, tags, page, limit);
-      setServices(data.services);
-      setTotal(data.total);
+      try {
+        setIsLoading(true);
+        const data = await getServices(keyword, tags, page, limit);
+        setServices(data.services);
+        setTotal(data.total);
+      } catch (e) {
+        console.error("An error occurred: ", e);
+      } finally {
+        setIsLoading(false);
+      }
     }, 300);
   }, [keyword, limit, page, tags]);
 
@@ -87,31 +98,47 @@ const ServicePage = () => {
         />
       </div>
 
-      <div className="my-5 flex-1 grid gap-5 xl:grid-cols-5 md:grid-cols-4 grid-cols-2 auto-rows-min">
-        {services.map((item: Service, index: number) => {
-          return (
-            <ServiceItem
-              onItemDeleted={fetchServices}
-              key={index}
-              service={item}
+      <>
+        {isLoading ? (
+          <div className="my-5 flex-1 grid gap-5 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 auto-rows-min">
+            {[...Array(limit / 2)].map((_item, index) => (
+              <ServiceSkeletonItem key={index} />
+            ))}
+          </div>
+        ) : services.length > 0 ? (
+          <>
+            <div className="my-5 flex-1 grid gap-5 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 auto-rows-min">
+              {services.map((item: Service, index: number) => {
+                return (
+                  <ServiceItem
+                    onItemDeleted={fetchServices}
+                    key={index}
+                    service={item}
+                  />
+                );
+              })}
+            </div>
+            <Pagination
+              align="center"
+              total={total}
+              showSizeChanger
+              defaultPageSize={1}
+              pageSize={limit}
+              pageSizeOptions={[10, 20, 50, 100]}
+              showQuickJumper
+              onChange={(page, pageSize) => {
+                setPage(page);
+                setLimit(pageSize);
+              }}
+              showTotal={
+                isMobile ? undefined : (total) => `Total ${total} items`
+              }
             />
-          );
-        })}
-      </div>
-      <Pagination
-        align="center"
-        total={total}
-        showSizeChanger
-        defaultPageSize={1}
-        pageSize={limit}
-        pageSizeOptions={[10, 25, 50, 100]}
-        showQuickJumper
-        onChange={(page, pageSize) => {
-          setPage(page);
-          setLimit(pageSize);
-        }}
-        showTotal={(total) => `Total ${total} items`}
-      />
+          </>
+        ) : (
+          <Empty className="my-5 flex-1 content-center"></Empty>
+        )}
+      </>
     </div>
   );
 };

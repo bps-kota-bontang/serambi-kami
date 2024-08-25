@@ -1,6 +1,7 @@
 import { createService, getServiceTags } from "@/api/Service";
 import { getTeams } from "@/api/Team";
 import { API_BASE_URL } from "@/configs/Constant";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Team } from "@/types/Team";
 import { UploadOutlined } from "@ant-design/icons";
 import {
@@ -18,9 +19,11 @@ import { useEffect, useState } from "react";
 
 const CreateServicePage = () => {
   const { notification, message } = App.useApp();
+  const [isLoading, setIsLoading] = useState(false);
   const [labels, setLables] = useState<SelectProps["options"]>([]);
   const [teams, setTeams] = useState<SelectProps["options"]>([]);
   const [form] = Form.useForm();
+  const isMobile = useMediaQuery();
 
   useEffect(() => {
     const fetchServiceTags = async () => {
@@ -46,11 +49,21 @@ const CreateServicePage = () => {
 
   const onFinish = async (values: any) => {
     try {
-      const { image, username, password, note, hasSso, teams, ...payload } =
-        values;
+      setIsLoading(true);
+      const {
+        image,
+        username,
+        password,
+        note,
+        hasSso,
+        teams,
+        tags,
+        ...payload
+      } = values;
 
       await createService({
         ...payload,
+        tags: tags ?? [],
         teams: teams.map((team: string) => {
           return {
             teamId: team,
@@ -77,6 +90,8 @@ const CreateServicePage = () => {
         description:
           "Terjadi kesalahan saat menambahkan layanan. Silakan coba lagi.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -86,7 +101,7 @@ const CreateServicePage = () => {
         <Card>
           <Card.Grid
             style={{
-              width: "50%",
+              width: isMobile ? "100%" : "50%",
             }}
             hoverable={false}
           >
@@ -148,18 +163,7 @@ const CreateServicePage = () => {
                 options={teams}
               />
             </Form.Item>
-            <Form.Item
-              label="Label Layanan"
-              name={"tags"}
-              required
-              tooltip="Label wajib diisi"
-              rules={[
-                {
-                  required: true,
-                  message: "Silahkan masukan label",
-                },
-              ]}
-            >
+            <Form.Item label="Label Layanan" name={"tags"}>
               <Select
                 mode="tags"
                 allowClear
@@ -184,7 +188,7 @@ const CreateServicePage = () => {
                 maxCount={1}
                 onChange={(info) => {
                   if (info.file.status !== "uploading") {
-                    console.log(info.file, info.fileList);
+                    //console.log(info.file, info.fileList);
                   }
                   if (info.file.status === "done") {
                     message.success(
@@ -201,7 +205,7 @@ const CreateServicePage = () => {
           </Card.Grid>
           <Card.Grid
             style={{
-              width: "50%",
+              width: isMobile ? "100%" : "50%",
             }}
             hoverable={false}
           >
@@ -229,7 +233,7 @@ const CreateServicePage = () => {
               <Checkbox>Apakah tersedia Single Sign On?</Checkbox>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" loading={isLoading}>
                 Tambah
               </Button>
             </Form.Item>
