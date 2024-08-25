@@ -33,6 +33,7 @@ jobs:
           --build-arg SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
           --build-arg SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
           --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+          --build-arg SENTRY_RELEASE=$VERSION \
           -f Dockerfile.production \
           -t ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_REGISTRY_USERNAME }}/serambi-kami:$VERSION \
           -t ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_REGISTRY_USERNAME }}/serambi-kami:latest \
