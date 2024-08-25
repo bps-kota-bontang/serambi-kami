@@ -1,12 +1,15 @@
 import { getServices, getServiceTags } from "@/api/Service";
-import ServiceItem from "@/components/service/ServiceItem";
-import ServiceSkeletonItem from "@/components/service/ServiceSkeletonItem";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Service } from "@/types/Service";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Empty, Input, Pagination, Select, SelectProps } from "antd";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { lazy, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+
+const ServiceItem = lazy(() => import("@/components/service/ServiceItem"));
+const ServiceSkeletonItem = lazy(
+  () => import("@/components/service/ServiceSkeletonItem")
+);
 
 const ServicePage = () => {
   const [services, setServices] = useState<Service[]>([]);
@@ -22,11 +25,59 @@ const ServicePage = () => {
   const [searchParams] = useSearchParams();
   const isMobile = useMediaQuery();
 
+  const onPageChange = useCallback(
+    (page: number, pageSize: number) => {
+      setPage(page);
+      setLimit(pageSize);
+
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set("page", page.toString());
+      searchParams.set("limit", pageSize.toString());
+
+      navigate({
+        pathname: window.location.pathname,
+        search: searchParams.toString(),
+      });
+    },
+    [navigate]
+  );
+
+  const onKeywordChange = useCallback(
+    (newKeyword: string) => {
+      setKeyword(newKeyword);
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set("keyword", newKeyword);
+
+      navigate({
+        pathname: window.location.pathname,
+        search: searchParams.toString(),
+      });
+    },
+    [navigate]
+  );
+
+  const onTagsChange = useCallback(
+    (value: string[]) => {
+      setTags(value);
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set("tags", value.join(","));
+
+      navigate({
+        pathname: window.location.pathname,
+        search: searchParams.toString(),
+      });
+    },
+    [navigate]
+  );
+
   useEffect(() => {
     const initialKeyword = searchParams.get("keyword") || "";
     const initialLimit = parseInt(searchParams.get("limit") || "10");
     const initialPage = parseInt(searchParams.get("page") || "1");
-    const initialTags = searchParams.get("tags")?.split(",") || [];
+    const initialTags =
+      searchParams.get("tags") == ""
+        ? []
+        : searchParams.get("tags")?.split(",") || [];
 
     setKeyword(initialKeyword);
     setLimit(initialLimit);
@@ -86,15 +137,15 @@ const ServicePage = () => {
           placeholder="Saring berdasarkan label"
           defaultValue={[]}
           value={tags}
-          onChange={(value) => setTags(value)}
+          onChange={onTagsChange}
           options={options}
         />
         <Input.Search
           value={keyword}
           className="xl:col-span-2 col-span-1"
           placeholder="Cari berdasarkan nama atau deskripsi layanan"
-          onChange={(e) => setKeyword(e.target.value)}
-          onSearch={(value) => setKeyword(value)}
+          onChange={(e) => onKeywordChange(e.target.value)}
+          onSearch={(value) => onKeywordChange(value)}
         />
       </div>
 
@@ -126,10 +177,7 @@ const ServicePage = () => {
               pageSize={limit}
               pageSizeOptions={[10, 20, 50, 100]}
               showQuickJumper
-              onChange={(page, pageSize) => {
-                setPage(page);
-                setLimit(pageSize);
-              }}
+              onChange={onPageChange}
               showTotal={
                 isMobile ? undefined : (total) => `Total ${total} items`
               }
