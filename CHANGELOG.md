@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.1...v0.1.2) (2024-08-25)
+
+
+### Bug Fixes
+
+* correct handle response status 204 ([3c84ec0](https://github.com/bps-kota-bontang/serambi-kami/commit/3c84ec0ec311d0b092249961be1b2aed933d8cb8))
+* handle modal delete service and team ([70999c5](https://github.com/bps-kota-bontang/serambi-kami/commit/70999c545d89cfb2fac06a2d9a1f7637acdd7c4e))
+
 ## [0.1.1](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.0...v0.1.1) (2024-08-25)
 
 
