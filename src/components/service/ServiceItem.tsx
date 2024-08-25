@@ -87,7 +87,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
                   content: "Apakah Anda yakin ingin menghapus layanan ini?",
                   cancelText: "Batal",
                   okText: "Hapus",
-                  onOk: () => handleDeleteService(service.id),
+                  onOk: async () => await handleDeleteService(service.id),
                 });
               },
             },

@@ -109,7 +109,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
                       content: "Apakah Anda yakin ingin menghapus tim ini?",
                       cancelText: "Batal",
                       okText: "Hapus",
-                      onOk: () => handleDeleteService(team.id),
+                      onOk: async() => await handleDeleteService(team.id),
                     });
                   },
                 },
