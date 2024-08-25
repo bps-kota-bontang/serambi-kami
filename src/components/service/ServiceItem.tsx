@@ -8,7 +8,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface ServiceItemProps {
   service: Service;
-  onItemDeleted: () => void;
+  onItemDeleted: () => Promise<void>;
 }
 
 const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
@@ -23,7 +23,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
         message: "Berhasil Menghapus Layanan",
         description: "Layanan berhasil dihapus",
       });
-      onItemDeleted();
+      await onItemDeleted();
     } catch (error) {
       console.error(error);
       notification.error({
@@ -65,7 +65,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
   };
 
   return (
-    <div className="relative bg-white rounded-md drop-shadow-md p-5 gap-2 flex flex-col ">
+    <div className="relative bg-white border rounded-md drop-shadow-sm p-5 gap-2 flex flex-col ">
       <Dropdown
         menu={{
           items: [
@@ -87,7 +87,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
                   content: "Apakah Anda yakin ingin menghapus layanan ini?",
                   cancelText: "Batal",
                   okText: "Hapus",
-                  onOk: () => handleDeleteService(service.id),
+                  onOk: async () => await handleDeleteService(service.id),
                 });
               },
             },

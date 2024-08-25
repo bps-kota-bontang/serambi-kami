@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "@/configs/Constant";
 import { Service } from "@/types/Service";
+import { handleResponse } from "@/utils/Response";
 
 export const getServices = async (
   keyword: string,
@@ -21,13 +22,10 @@ export const getServices = async (
     }
   );
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data as { services: Service[]; total: number };
+  return (await handleResponse(response)) as {
+    services: Service[];
+    total: number;
+  };
 };
 
 export const getServiceTags = async (type?: string) => {
@@ -43,13 +41,7 @@ export const getServiceTags = async (type?: string) => {
     }
   );
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data;
+  return await handleResponse(response);
 };
 
 export const getService = async (id: string) => {
@@ -57,13 +49,7 @@ export const getService = async (id: string) => {
     credentials: "include",
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data;
+  return await handleResponse(response);
 };
 
 export const createService = async (data: any) => {
@@ -76,13 +62,7 @@ export const createService = async (data: any) => {
     credentials: "include",
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data;
+  return await handleResponse(response);
 };
 
 export const updateService = async (serviceId: string, data: any) => {
@@ -95,13 +75,7 @@ export const updateService = async (serviceId: string, data: any) => {
     credentials: "include",
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data;
+  return await handleResponse(response);
 };
 
 export const deleteService = async (id: string) => {
@@ -110,8 +84,5 @@ export const deleteService = async (id: string) => {
     credentials: "include",
   });
 
-  if (!response.ok) {
-    const result = await response.json();
-    throw new Error(result.message);
-  }
+  await handleResponse(response);
 };

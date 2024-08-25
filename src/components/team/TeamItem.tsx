@@ -18,8 +18,8 @@ import FormUpdateTeam from "@/components/team/FormUpdateTeam";
 
 interface TeamItemProps {
   team: Team;
-  onItemUpdated: () => void;
-  onItemDeleted: () => void;
+  onItemUpdated: () => Promise<void>;
+  onItemDeleted: () => Promise<void>;
 }
 
 const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
@@ -37,7 +37,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
         message: "Berhasil Menghapus Tim",
         description: "Tim berhasil dihapus",
       });
-      onItemDeleted();
+      await onItemDeleted();
     } catch (error) {
       console.error(error);
       notification.error({
@@ -63,7 +63,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
         description:
           "Anda telah berhasil memperbarui anggota tim. Silakan cek kembali daftar tim Anda.",
       });
-      onItemUpdated();
+      await onItemUpdated();
       setOpen(false);
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -78,7 +78,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
 
   return (
     <>
-      <div className="relative bg-white rounded-md drop-shadow-md p-5 gap-2 flex flex-col ">
+      <div className="relative bg-white border rounded-md drop-shadow-sm p-5 gap-2 flex flex-col ">
         {isAdmin || user?.isSuper ? (
           <Dropdown
             menu={{
@@ -109,7 +109,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
                       content: "Apakah Anda yakin ingin menghapus tim ini?",
                       cancelText: "Batal",
                       okText: "Hapus",
-                      onOk: () => handleDeleteService(team.id),
+                      onOk: async() => await handleDeleteService(team.id),
                     });
                   },
                 },

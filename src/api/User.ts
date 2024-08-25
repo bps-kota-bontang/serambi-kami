@@ -1,17 +1,12 @@
 import { API_BASE_URL } from "@/configs/Constant";
+import { handleResponse } from "@/utils/Response";
 
 export const me = async () => {
   const response = await fetch(`${API_BASE_URL}/v1/users/me`, {
     credentials: "include",
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data;
+  return await handleResponse(response);
 };
 
 export const getUsers = async () => {
@@ -19,11 +14,5 @@ export const getUsers = async () => {
     credentials: "include",
   });
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message);
-  }
-
-  return result.data;
+  return await handleResponse(response);
 };

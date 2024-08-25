@@ -30,6 +30,9 @@ jobs:
         run: |
           docker build \
           --build-arg BUILD_HASH=$SHORT_SHA \
+          --build-arg SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
+          --build-arg SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
+          --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
           -f Dockerfile.staging \
           -t ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_REGISTRY_USERNAME }}/serambi-kami:latest \
           .
