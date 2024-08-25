@@ -1,6 +1,8 @@
 import * as Sentry from "@sentry/react";
 
 export const handleResponse = async (response: Response) => {
+  if (response.status === 204) return;
+
   const result = await response.json();
 
   if (!response.ok) {

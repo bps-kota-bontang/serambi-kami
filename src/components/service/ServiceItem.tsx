@@ -45,7 +45,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
 
       if (!credential) return;
 
-      modal.info({
+      await modal.info({
         maskClosable: true,
         closable: true,
         okCancel: true,
@@ -78,8 +78,8 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
               key: "delete",
               label: "Hapus",
               danger: true,
-              onClick: () => {
-                modal.error({
+              onClick: async () => {
+                await modal.error({
                   maskClosable: true,
                   closable: true,
                   okCancel: true,

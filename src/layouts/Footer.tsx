@@ -1,3 +1,4 @@
+import { BUILD_HASH, MODE } from "@/configs/Constant";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Layout } from "antd";
 
@@ -15,7 +16,7 @@ const Footer = () => {
         <>
           © {new Date().getFullYear()}. Made with ❤️ by BPS Kota Bontang.
           (Versi:
-          {APP_VERSION}, Mode: {import.meta.env.MODE}, Build: {import.meta.env.VITE_BUILD_HASH})
+          {APP_VERSION}, Mode: {MODE}, Build: {BUILD_HASH})
         </>
       )}
     </Layout.Footer>

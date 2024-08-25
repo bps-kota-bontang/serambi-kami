@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import * as Sentry from "@sentry/react";
 import App from "@/App";
-import { MODE } from "@/configs/Constant";
+import { BUILD_HASH, MODE } from "@/configs/Constant";
 import "./index.css";
 
 Sentry.init({
@@ -11,6 +11,7 @@ Sentry.init({
     Sentry.browserTracingIntegration(),
     Sentry.replayIntegration(),
   ],
+  release: MODE == "production" ? APP_VERSION : BUILD_HASH,
   environment: MODE,
   tracesSampleRate: 1.0,
   tracePropagationTargets:
@@ -19,7 +20,7 @@ Sentry.init({
       : ["localhost", /^https:\/\/staging-api-serambi\.bpsbontang\.com/],
 
   replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0
+  replaysOnErrorSampleRate: 1.0,
 });
 
 createRoot(document.getElementById("root")!).render(

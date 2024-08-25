@@ -100,8 +100,8 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
                   label: "Hapus",
                   danger: true,
                   disabled: isAdmin,
-                  onClick: () => {
-                    modal.error({
+                  onClick: async () => {
+                    await modal.error({
                       maskClosable: true,
                       closable: true,
                       okCancel: true,
@@ -109,7 +109,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
                       content: "Apakah Anda yakin ingin menghapus tim ini?",
                       cancelText: "Batal",
                       okText: "Hapus",
-                      onOk: async() => await handleDeleteService(team.id),
+                      onOk: async () => await handleDeleteService(team.id),
                     });
                   },
                 },
