@@ -38,7 +38,7 @@ const DetailServicePage = () => {
           const data = await getService(serviceId);
           setService(data);
         } catch (error) {
-          console.log("An error occurred: ", error);
+          console.error("An error occurred: ", error);
           navigate("/services");
           notification.error({
             message: "Gagal mendapatkan informasi layanan",
@@ -225,7 +225,7 @@ const DetailServicePage = () => {
                 maxCount={1}
                 onChange={(info) => {
                   if (info.file.status !== "uploading") {
-                    console.log(info.file, info.fileList);
+                    //console.log(info.file, info.fileList);
                   }
                   if (info.file.status === "done") {
                     const imageUrl = info.file.response.data.imageUrl;
