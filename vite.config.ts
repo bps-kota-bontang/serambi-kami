@@ -10,6 +10,12 @@ export default defineConfig({
       org: process.env.SENTRY_ORG,
       project: process.env.SENTRY_PROJECT,
       authToken: process.env.SENTRY_AUTH_TOKEN,
+      release: {
+        name:
+          process.env.MODE == "production"
+            ? process.env.npm_package_version
+            : process.env.VITE_BUILD_HASH,
+      },
     }),
   ],
   resolve: {
