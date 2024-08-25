@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.2...v0.1.3) (2024-08-25)
+
+
+### Bug Fixes
+
+* correct configure sentry release ([1c021d9](https://github.com/bps-kota-bontang/serambi-kami/commit/1c021d970431ef0a5de86d4dd372313178de1a91))
+
 ## [0.1.2](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.1...v0.1.2) (2024-08-25)
 
 
