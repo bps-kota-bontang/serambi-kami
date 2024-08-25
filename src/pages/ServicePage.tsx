@@ -1,29 +1,28 @@
-import { getServices, getServiceTags } from "@/api/Service";
+import { getServiceTags } from "@/api/Service";
+import ServicesContent from "@/components/service/ServicesContent";
+import ServicesFallback from "@/components/service/ServicesFallback";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { Service } from "@/types/Service";
+import useServices from "@/hooks/useServices";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Empty, Input, Pagination, Select, SelectProps } from "antd";
-import { lazy, useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-const ServiceItem = lazy(() => import("@/components/service/ServiceItem"));
-const ServiceSkeletonItem = lazy(
-  () => import("@/components/service/ServiceSkeletonItem")
-);
-
 const ServicePage = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [total, setTotal] = useState<number>(0);
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery();
   const [keyword, setKeyword] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [tags, setTags] = useState<string[]>([]);
   const [options, setOptions] = useState<SelectProps["options"]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
-  const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [searchParams] = useSearchParams();
-  const isMobile = useMediaQuery();
+  const { services, total, fetchServices } = useServices(
+    keyword,
+    tags,
+    page,
+    limit
+  );
 
   const onPageChange = useCallback(
     (page: number, pageSize: number) => {
@@ -96,28 +95,6 @@ const ServicePage = () => {
     fetchServiceTags();
   }, []);
 
-  const fetchServices = useCallback(async () => {
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
-    }
-    debounceTimeout.current = setTimeout(async () => {
-      try {
-        setIsLoading(true);
-        const data = await getServices(keyword, tags, page, limit);
-        setServices(data.services);
-        setTotal(data.total);
-      } catch (e) {
-        console.error("An error occurred: ", e);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 300);
-  }, [keyword, limit, page, tags]);
-
-  useEffect(() => {
-    fetchServices();
-  }, [fetchServices]);
-
   return (
     <div className="w-full min-h-full bg-white p-5 flex flex-col gap-2">
       <div>
@@ -148,32 +125,18 @@ const ServicePage = () => {
           onSearch={(value) => onKeywordChange(value)}
         />
       </div>
-
-      <>
-        {isLoading ? (
-          <div className="my-5 flex-1 grid gap-5 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 auto-rows-min">
-            {[...Array(limit / 2)].map((_item, index) => (
-              <ServiceSkeletonItem key={index} />
-            ))}
-          </div>
-        ) : services.length > 0 ? (
-          <>
-            <div className="my-5 flex-1 grid gap-5 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 auto-rows-min">
-              {services.map((item: Service, index: number) => {
-                return (
-                  <ServiceItem
-                    onItemDeleted={fetchServices}
-                    key={index}
-                    service={item}
-                  />
-                );
-              })}
-            </div>
+      <div className="flex-1 flex flex-col justify-center">
+        {services && services.length > 0 ? (
+          <Suspense fallback={<ServicesFallback limit={limit} />}>
+            <ServicesContent
+              services={services}
+              onItemDeleted={fetchServices}
+            />
             <Pagination
               align="center"
               total={total}
               showSizeChanger
-              defaultPageSize={1}
+              defaultPageSize={10}
               pageSize={limit}
               pageSizeOptions={[10, 20, 50, 100]}
               showQuickJumper
@@ -182,11 +145,11 @@ const ServicePage = () => {
                 isMobile ? undefined : (total) => `Total ${total} items`
               }
             />
-          </>
+          </Suspense>
         ) : (
-          <Empty className="my-5 flex-1 content-center"></Empty>
+          services && <Empty description="Tidak ada layanan" />
         )}
-      </>
+      </div>
     </div>
   );
 };
