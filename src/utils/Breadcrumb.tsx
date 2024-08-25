@@ -1,6 +1,7 @@
 import { APP_NAME } from "@/configs/Constant";
 import { Route } from "@/types/Route";
 import { ItemType } from "antd/es/breadcrumb/Breadcrumb";
+import { Link } from "react-router-dom";
 
 export function createBreadcrumbItems(
   paths: string[],
@@ -20,8 +21,7 @@ export function createBreadcrumbItems(
   let currentPath = "";
 
   breadcrumbItems.push({
-    ...(paths.length != 0 && { href: "/" }),
-    title: APP_NAME,
+    title: paths.length ? <Link to="/">{APP_NAME}</Link> : APP_NAME,
   });
 
   paths.forEach((path, index) => {
@@ -32,7 +32,9 @@ export function createBreadcrumbItems(
     if (route) {
       breadcrumbItems.push({
         title: route.title,
-        ...(index !== paths.length - 1 && { href: currentPath }),
+        ...(index !== paths.length - 1 && {
+          title: <Link to={currentPath}>{route.title}</Link>,
+        }),
       });
     } else {
       const dynamicRoutes = Object.entries(routeMap)
