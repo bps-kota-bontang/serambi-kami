@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.1.1](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.0...v0.1.1) (2024-08-25)
+
+
+### Bug Fixes
+
+* correct call as async when delete service or service ([6c64e08](https://github.com/bps-kota-bontang/serambi-kami/commit/6c64e0850b5450cdb4041ef712527c81e07e30d7))
+* correct type props as promise ([df78694](https://github.com/bps-kota-bontang/serambi-kami/commit/df7869453aafa4d64ec81d8c3ae780fc8cf36963))
+
+
+### Performance Improvements
+
+* implement sentry ([a03dc58](https://github.com/bps-kota-bontang/serambi-kami/commit/a03dc5866078fcca57b0a1bcda20af4d8fa3a3cc))
+* implement suspense and fallback in list service ([884b7e2](https://github.com/bps-kota-bontang/serambi-kami/commit/884b7e29b0ad5511ec35f6b7f3b8d9fec282af88))
+* update params based on filter ([82c8de9](https://github.com/bps-kota-bontang/serambi-kami/commit/82c8de92bb3c1253a6a9c6bed4bb8af7315094db))
+
 ## 0.1.0 (2024-08-25)
 
 
