@@ -5,7 +5,7 @@ const ServiceItem = lazy(() => import("@/components/service/ServiceItem"));
 
 interface ServicesContentProps {
   services: Service[];
-  onItemDeleted: () => void;
+  onItemDeleted: () => Promise<void>;
 }
 
 const ServicesContent = ({ services, onItemDeleted }: ServicesContentProps) => {

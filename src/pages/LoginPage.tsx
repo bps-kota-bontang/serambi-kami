@@ -51,7 +51,7 @@ const LoginPage = () => {
 
   return (
     <div className="w-full h-screen flex p-3 ">
-      <div className="flex-1 flex flex-col justify-center bg-white">
+      <div className="flex-1 flex flex-col justify-center px-3 bg-white">
         <div className="mx-auto">
           <div className="flex flex-col justify-center items-start gap-2">
             <div className="border rounded-lg p-3">
