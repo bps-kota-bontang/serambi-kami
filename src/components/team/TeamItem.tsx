@@ -122,7 +122,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
                   key: "delete",
                   label: "Hapus",
                   danger: true,
-                  disabled: isAdmin,
+                  disabled: !user?.isSuper,
                   onClick: async () => {
                     await modal.error({
                       maskClosable: true,
