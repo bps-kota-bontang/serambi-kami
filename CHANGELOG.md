@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.3...v0.1.4) (2024-08-26)
+
+
+### Bug Fixes
+
+* correct only super user can delete team ([bf64e87](https://github.com/bps-kota-bontang/serambi-kami/commit/bf64e8702bfbc5a1ec603ff3ee233615e4e9e6a6))
+
 ## [0.1.3](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.2...v0.1.3) (2024-08-25)
 
 
