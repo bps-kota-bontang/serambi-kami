@@ -1,4 +1,4 @@
-import { deleteTeam, updateTeamUsers } from "@/api/Team";
+import { deleteTeam, updateTeamUser, updateTeamUsers } from "@/api/Team";
 import { useAuth } from "@/hooks/useAuth";
 import { Team } from "@/types/Team";
 import { getInitials } from "@/utils/String";
@@ -15,6 +15,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import FormUpdateTeam from "@/components/team/FormUpdateTeam";
+import { User } from "@/types/User";
 
 interface TeamItemProps {
   team: Team;
@@ -76,6 +77,28 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
     }
   };
 
+  const handleClickAvatar = async (
+    teamId: string,
+    user: User,
+    status: boolean
+  ) => {
+    await modal.info({
+      maskClosable: true,
+      closable: true,
+      okCancel: true,
+      title: status ? `Hapus Admin: ${user.name}` : `Jadikan Admin: ${user.name}`,
+      content: status
+        ? `Apakah Anda yakin ingin menghapus ${user.name} sebagai Admin?`
+        : `Apakah Anda yakin ingin menjadikan ${user.name} sebagai Admin?`,
+      cancelText: "Batal",
+      okText: "Ya",
+      onOk: async () => {
+        await updateTeamUser(teamId, user.id, { isAdmin: !status });
+        await onItemUpdated();
+      },
+    });
+  };
+
   return (
     <>
       <div className="relative bg-white border rounded-md drop-shadow-sm p-5 gap-2 flex flex-col ">
@@ -99,7 +122,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
                   key: "delete",
                   label: "Hapus",
                   danger: true,
-                  disabled: isAdmin,
+                  disabled: !user?.isSuper,
                   onClick: async () => {
                     await modal.error({
                       maskClosable: true,
@@ -132,7 +155,20 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
               return (
                 <Tooltip title={item.user.name} placement="top" key={index}>
                   <Badge dot={item.isAdmin} offset={[-5, 5]}>
-                    <Avatar style={{ backgroundColor: "#f56a00" }}>
+                    <Avatar
+                      style={{ backgroundColor: "#f56a00" }}
+                      className={user?.isSuper ? "hover:cursor-pointer" : ""}
+                      onClick={
+                        user?.isSuper
+                          ? async () =>
+                              await handleClickAvatar(
+                                team.id,
+                                item.user,
+                                item.isAdmin
+                              )
+                          : undefined
+                      }
+                    >
                       {getInitials(item.user.name)}
                     </Avatar>
                   </Badge>

@@ -30,6 +30,26 @@ export const updateTeamUsers = async (teamId: string, data: any) => {
   return await handleResponse(response);
 };
 
+export const updateTeamUser = async (
+  teamId: string,
+  userId: string,
+  data: any
+) => {
+  const response = await fetch(
+    `${API_BASE_URL}/v1/teams/${teamId}/users/${userId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
+    }
+  );
+
+  return await handleResponse(response);
+};
+
 export const createTeam = async (data: any) => {
   const response = await fetch(`${API_BASE_URL}/v1/teams`, {
     method: "POST",
