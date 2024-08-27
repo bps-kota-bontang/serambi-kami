@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.4...v0.1.5) (2024-08-27)
+
+
+### Performance Improvements
+
+* configure profiling using sentry ([e228fb9](https://github.com/bps-kota-bontang/serambi-kami/commit/e228fb9cfcda6b638abc4907cabb4d3a77a7459a))
+
 ## [0.1.4](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.3...v0.1.4) (2024-08-26)
 
 
