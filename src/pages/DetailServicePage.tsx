@@ -62,6 +62,7 @@ const DetailServicePage = () => {
         teams: service.teams.map((item: { team: Team }) => item.team.id),
         tags: service.tags,
         image: service.imageUrl,
+        hasLogo: service.hasLogo,
         username: service.credential?.username,
         password: service.credential?.password,
         note: service.credential?.note,
@@ -246,6 +247,9 @@ const DetailServicePage = () => {
                   src={imageUrl}
                 />
               </Upload>
+            </Form.Item>
+            <Form.Item name="hasLogo" valuePropName="checked">
+              <Checkbox>Apakah berupa logo?</Checkbox>
             </Form.Item>
           </Card.Grid>
           <Card.Grid

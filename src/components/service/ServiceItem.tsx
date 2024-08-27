@@ -65,64 +65,76 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
   };
 
   return (
-    <div className="relative bg-white border rounded-md drop-shadow-sm p-5 gap-2 flex flex-col ">
-      <Dropdown
-        menu={{
-          items: [
-            {
-              key: "update",
-              label: "Ubah",
-              onClick: () => navigate(`/services/${service.id}`),
-            },
-            {
-              key: "delete",
-              label: "Hapus",
-              danger: true,
-              onClick: async () => {
-                await modal.error({
-                  maskClosable: true,
-                  closable: true,
-                  okCancel: true,
-                  title: `Hapus Layanan: ${service.name}`,
-                  content: "Apakah Anda yakin ingin menghapus layanan ini?",
-                  cancelText: "Batal",
-                  okText: "Hapus",
-                  onOk: async () => await handleDeleteService(service.id),
-                });
-              },
-            },
-          ],
-        }}
-        placement="bottomRight"
-      >
-        <Button
-          className="absolute top-5 right-5"
-          icon={<MoreOutlined />}
-          size="small"
-        />
-      </Dropdown>
-      <div>
+    <div className="relative bg-white border rounded-md drop-shadow-sm gap-2 flex flex-col ">
+      {!service.hasLogo ? (
         <Image
+          className="object-cover object-top"
+          height={100}
           preview={false}
-          height={isMobile ? undefined : 48}
-          width={isMobile ? 48 : undefined}
           src={service.imageUrl}
         />
-      </div>
-      <div className="flex flex-col justify-center flex-1">
-        <div className="text-lg text-black font-semibold">{service.name}</div>
-        <div className="text-sm text-gray-500 line-clamp-2 mb-5">
-          {service.description}
+      ) : null}
+      <div className="p-5 flex flex-1 flex-col">
+        <Dropdown
+          menu={{
+            items: [
+              {
+                key: "update",
+                label: "Ubah",
+                onClick: () => navigate(`/services/${service.id}`),
+              },
+              {
+                key: "delete",
+                label: "Hapus",
+                danger: true,
+                onClick: async () => {
+                  await modal.error({
+                    maskClosable: true,
+                    closable: true,
+                    okCancel: true,
+                    title: `Hapus Layanan: ${service.name}`,
+                    content: "Apakah Anda yakin ingin menghapus layanan ini?",
+                    cancelText: "Batal",
+                    okText: "Hapus",
+                    onOk: async () => await handleDeleteService(service.id),
+                  });
+                },
+              },
+            ],
+          }}
+          placement="bottomRight"
+        >
+          <Button
+            className="absolute top-5 right-5"
+            icon={<MoreOutlined />}
+            size="small"
+          />
+        </Dropdown>
+        <div className="flex-1 flex items-center">
+          {service.hasLogo ? (
+            <Image
+              preview={false}
+              height={isMobile ? undefined : 48}
+              width={isMobile ? 48 : undefined}
+              src={service.imageUrl}
+            />
+          ) : null}
         </div>
-        <div className=" flex flex-col gap-2 mt-auto">
-          <Button type="primary" onClick={() => handleClick(service.link)}>
-            Lihat
-          </Button>
-          {service.credential && (
-            <Button onClick={showModal}>
-              {isMobile ? "Kredensial" : "Tampilkan Kredensial"}
+        <div className="flex flex-col flex-1">
+          <div className="text-lg text-black font-semibold">{service.name}</div>
+          <div className="text-sm text-gray-500 line-clamp-2 mb-5">
+            {service.description}
+          </div>
+          <div className=" flex flex-col gap-2">
+            <Button type="primary" onClick={() => handleClick(service.link)}>
+              Lihat
             </Button>
-          )}
+            {service.credential && (
+              <Button onClick={showModal}>
+                {isMobile ? "Kredensial" : "Tampilkan Kredensial"}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>

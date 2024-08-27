@@ -202,6 +202,9 @@ const CreateServicePage = () => {
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
             </Form.Item>
+            <Form.Item name="hasLogo" valuePropName="checked">
+              <Checkbox>Apakah berupa logo?</Checkbox>
+            </Form.Item>
           </Card.Grid>
           <Card.Grid
             style={{
