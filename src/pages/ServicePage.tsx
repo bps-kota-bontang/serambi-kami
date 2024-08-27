@@ -136,6 +136,8 @@ const ServicePage = () => {
               align="center"
               total={total}
               showSizeChanger
+              defaultCurrent={1}
+              current={page}
               defaultPageSize={10}
               pageSize={limit}
               pageSizeOptions={[10, 20, 50, 100]}
