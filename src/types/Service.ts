@@ -6,6 +6,7 @@ export interface Service {
   name: string;
   description: string;
   imageUrl: string;
+  hasLogo: boolean;
   link: string;
   teams: {
     team: Team;
