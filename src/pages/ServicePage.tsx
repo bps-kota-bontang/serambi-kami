@@ -71,8 +71,8 @@ const ServicePage = () => {
 
   useEffect(() => {
     const initialKeyword = searchParams.get("keyword") || "";
-    const initialLimit = parseInt(searchParams.get("limit") || "10");
-    const initialPage = parseInt(searchParams.get("page") || "1");
+    const initialLimit = parseInt(searchParams.get("limit") || "10") || 10;
+    const initialPage = parseInt(searchParams.get("page") || "1") || 1;
     const initialTags =
       searchParams.get("tags") == ""
         ? []
