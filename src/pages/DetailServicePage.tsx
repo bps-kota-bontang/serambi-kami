@@ -242,7 +242,7 @@ const DetailServicePage = () => {
               >
                 <Image
                   preview={false}
-                  width={48}
+                  className="max-w-lg max-h-96"
                   alt="Foto layanan"
                   src={imageUrl}
                 />
