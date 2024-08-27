@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.6](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.5...v0.1.6) (2024-08-27)
+
+
+### Bug Fixes
+
+* correct current page if query is exist ([e7ddd29](https://github.com/bps-kota-bontang/serambi-kami/commit/e7ddd299bd2a541aa8e1e2e5b8e5e4b994cc9031))
+* correct services fallback when page size in odd ([c9ed294](https://github.com/bps-kota-bontang/serambi-kami/commit/c9ed294f4fb70eb325c23a5f4a5d829748c5b953))
+* use default for limit or page if not valid ([42b8cae](https://github.com/bps-kota-bontang/serambi-kami/commit/42b8cae75c7ee190ccde21cf43cec07a8df51312))
+
 ## [0.1.5](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.4...v0.1.5) (2024-08-27)
 
 
