@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.6...v0.1.7) (2024-08-27)
+
+
+### Miscellaneous Chores
+
+* release 0.1.7 ([3608e76](https://github.com/bps-kota-bontang/serambi-kami/commit/3608e761a7076347267afcefb00e0eda5e96820e))
+
 ## [0.1.6](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.5...v0.1.6) (2024-08-27)
 
 
