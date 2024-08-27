@@ -239,10 +239,16 @@ const FormService = ({ serviceId, onSubmit }: FormServiceProps) => {
                 alt="Foto layanan"
                 src={image || ""}
                 loading="lazy"
-                fallback="https://via.placeholder.com/150"
+                fallback={"/default.png"}
               />
             </Upload>
           </Form.Item>
+          <p className="text-xs italic">
+            Foto layanan dapat berupa logo atau tangkapan layar layanan.
+          </p>
+          <p className="text-xs italic">
+            Khusus tangkapan layar gunakan ukuran 300 x 100.
+          </p>
           <Form.Item name="hasLogo" valuePropName="checked">
             <Checkbox>Apakah berupa logo?</Checkbox>
           </Form.Item>
