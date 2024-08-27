@@ -66,12 +66,15 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
 
   return (
     <div className="relative bg-white border rounded-md drop-shadow-sm gap-2 flex flex-col ">
-      <Image
-        preview={false}
-        height={48}
-        src={service.imageUrl}
-      />
-      <div className="p-5">
+      {!service.hasLogo ? (
+        <Image
+          className="object-cover object-top"
+          height={100}
+          preview={false}
+          src={service.imageUrl}
+        />
+      ) : null}
+      <div className="p-5 flex flex-1 flex-col">
         <Dropdown
           menu={{
             items: [
@@ -107,7 +110,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
             size="small"
           />
         </Dropdown>
-        <div>
+        <div className="flex-1 flex items-center">
           {service.hasLogo ? (
             <Image
               preview={false}
@@ -117,12 +120,12 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
             />
           ) : null}
         </div>
-        <div className="flex flex-col justify-center flex-1">
+        <div className="flex flex-col flex-1">
           <div className="text-lg text-black font-semibold">{service.name}</div>
           <div className="text-sm text-gray-500 line-clamp-2 mb-5">
             {service.description}
           </div>
-          <div className=" flex flex-col gap-2 mt-auto">
+          <div className=" flex flex-col gap-2">
             <Button type="primary" onClick={() => handleClick(service.link)}>
               Lihat
             </Button>
