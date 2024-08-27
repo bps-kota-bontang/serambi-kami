@@ -6,7 +6,7 @@ import { getInitials } from "@/utils/String";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, Layout, MenuProps, Breadcrumb, Button } from "antd";
 import { forwardRef } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface HeaderProps {
   collapsed: boolean;
@@ -29,8 +29,7 @@ const Header = forwardRef<HTMLDivElement, HeaderProps>(
     const items: MenuProps["items"] = [
       {
         key: "profile",
-        disabled: true,
-        label: "Profile",
+        label: <Link to="/profile">Profile</Link>,
       },
       {
         type: "divider",
