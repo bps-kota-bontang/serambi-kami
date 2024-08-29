@@ -3,7 +3,9 @@ import { Button, Form, Input, App, Divider } from "antd";
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { APP_NAME } from "@/configs/Constant";
+import { API_BASE_URL, APP_NAME } from "@/configs/Constant";
+import LogoBPS from "../../public/bps.svg?react";
+import Cookies from "js-cookie";
 
 interface FormLogin {
   email: string;
@@ -24,9 +26,20 @@ const LoginPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (Cookies.get("useSso") == "true") {
+      auth.loginSso();
+    }
+  }, [auth]);
+
   if (auth.isAuthenticated) {
     return <Navigate to="/" />;
   }
+
+  const handleClickSSO = () => {
+    Cookies.set("useSso", "true", { expires: 3 / 1440 });
+    window.location.href = `${API_BASE_URL}/v1/auth/sso`;
+  };
 
   const onFinish = async (values: FormLogin) => {
     try {
@@ -98,6 +111,14 @@ const LoginPage = () => {
               </Button>
             </Form.Item>
           </Form>
+          <Divider />
+          <Button
+            block
+            icon={<LogoBPS className="h-5 w-5" />}
+            onClick={handleClickSSO}
+          >
+            Masuk dengan SSO BPS
+          </Button>
         </div>
       </div>
       <div

@@ -5,14 +5,16 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import { login as loginApi } from "@/api/Auth";
+import { login as loginApi, logout as logoutApi } from "@/api/Auth";
 import { User } from "@/types/User";
 import { me } from "@/api/User";
+import Cookies from "js-cookie";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
+  loginSso: () => Promise<void>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -84,7 +86,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const logout = useCallback(() => {
+  const loginSso = useCallback(async () => {
+    try {
+      const data = await me();
+      setIsAuthenticated(true);
+      setUser(data);
+    } catch (error) {
+      console.error(
+        "Login failed:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
+      setIsAuthenticated(false);
+      setUser(null);
+      throw error;
+    } finally {
+      Cookies.remove("useSso");
+    }
+  }, []);
+
+  const logout = useCallback(async () => {
+    await logoutApi();
     setIsAuthenticated(false);
     setUser(null);
     localStorage.removeItem("isAuthenticated");
@@ -92,7 +113,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, login, logout, isLoading }}
+      value={{ isAuthenticated, user, login, loginSso, logout, isLoading }}
     >
       {children}
     </AuthContext.Provider>
