@@ -86,7 +86,9 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
       maskClosable: true,
       closable: true,
       okCancel: true,
-      title: status ? `Hapus Admin: ${user.name}` : `Jadikan Admin: ${user.name}`,
+      title: status
+        ? `Hapus Admin: ${user.name}`
+        : `Jadikan Admin: ${user.name}`,
       content: status
         ? `Apakah Anda yakin ingin menghapus ${user.name} sebagai Admin?`
         : `Apakah Anda yakin ingin menjadikan ${user.name} sebagai Admin?`,
@@ -150,7 +152,12 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
 
         <div className="flex flex-col justify-center gap-3 mr-10">
           <div className="text-lg text-black font-semibold">{team.name}</div>
-          <Avatar.Group>
+          <Avatar.Group
+            max={{
+              count: 8,
+              style: { color: "#f56a00", backgroundColor: "#fde3cf" },
+            }}
+          >
             {team.users.map((item, index) => {
               return (
                 <Tooltip title={item.user.name} placement="top" key={index}>
