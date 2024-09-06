@@ -154,7 +154,7 @@ const TeamItem = ({ team, onItemUpdated, onItemDeleted }: TeamItemProps) => {
           <div className="text-lg text-black font-semibold">{team.name}</div>
           <Avatar.Group
             max={{
-              count: 8,
+              count: 5,
               style: { color: "#f56a00", backgroundColor: "#fde3cf" },
             }}
           >
