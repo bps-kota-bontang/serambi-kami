@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.2.0](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.7...v0.2.0) (2024-09-06)
+
+
+### Features
+
+* implement login with sso ([1c79c83](https://github.com/bps-kota-bontang/serambi-kami/commit/1c79c83276869371e5d183c580ab0305ca7059e4))
+
+
+### Bug Fixes
+
+* correct fetch services using search ([706d5dd](https://github.com/bps-kota-bontang/serambi-kami/commit/706d5dd29a53e7d5250e1d801614febc907eef4e))
+* correct select option ([757b0ad](https://github.com/bps-kota-bontang/serambi-kami/commit/757b0ad64d0fadf892510224548d6be460320389))
+
+
+### Performance Improvements
+
+* implement modular for form service ([0455414](https://github.com/bps-kota-bontang/serambi-kami/commit/04554142aba2fc66ef54aca9a424eb1a87c79d34))
+
 ## [0.1.7](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.1.6...v0.1.7) (2024-08-27)
 
 
