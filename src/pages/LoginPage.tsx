@@ -3,7 +3,7 @@ import { Button, Form, Input, App, Divider } from "antd";
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { API_BASE_URL, APP_NAME } from "@/configs/Constant";
+import { API_BASE_URL, APP_NAME, HAS_LOGIN_SSO } from "@/configs/Constant";
 import LogoBPS from "../../public/bps.svg?react";
 import Cookies from "js-cookie";
 
@@ -111,14 +111,18 @@ const LoginPage = () => {
               </Button>
             </Form.Item>
           </Form>
-          <Divider />
-          <Button
-            block
-            icon={<LogoBPS className="h-5 w-5" />}
-            onClick={handleClickSSO}
-          >
-            Masuk dengan SSO BPS
-          </Button>
+          {HAS_LOGIN_SSO ? (
+            <>
+              <Divider />
+              <Button
+                block
+                icon={<LogoBPS className="h-5 w-5" />}
+                onClick={handleClickSSO}
+              >
+                Masuk dengan SSO BPS
+              </Button>
+            </>
+          ) : null}
         </div>
       </div>
       <div
