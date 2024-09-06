@@ -158,7 +158,7 @@ const FormService = ({ serviceId, onSubmit }: FormServiceProps) => {
               },
             ]}
           >
-            <Input.TextArea rows={4} placeholder="Masukkan nama deskripsi" />
+            <Input.TextArea rows={4} placeholder="Masukkan deskripsi layanan" />
           </Form.Item>
           <Form.Item
             label="Tautan Layanan"
@@ -189,7 +189,8 @@ const FormService = ({ serviceId, onSubmit }: FormServiceProps) => {
             <Select
               mode="multiple"
               allowClear
-              placeholder="Masukan label layanan"
+              optionFilterProp="label"
+              placeholder="Masukan tim"
               options={teams}
             />
           </Form.Item>

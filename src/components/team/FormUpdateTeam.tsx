@@ -37,6 +37,7 @@ const FormUpdateTeam = ({ onSubmit, form }: FormUpdateTeamProps) => {
         <Select
           mode="multiple"
           allowClear
+          optionFilterProp="label"
           placeholder="Masukan daftar anggota tim"
           options={users.map((item) => {
             return {
