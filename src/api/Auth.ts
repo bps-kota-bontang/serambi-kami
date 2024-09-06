@@ -14,3 +14,16 @@ export const login = async (email: string, password: string) => {
 
   return await handleResponse(response);
 };
+
+export const logout = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "X-App-Type": "web",
+      "Content-Type": "application/json",
+    },
+  });
+
+  await handleResponse(response);
+};

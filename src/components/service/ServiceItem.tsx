@@ -68,7 +68,7 @@ const ServiceItem = ({ service, onItemDeleted }: ServiceItemProps) => {
     <div className="relative bg-white border rounded-md drop-shadow-sm gap-2 flex flex-col ">
       {!service.hasLogo ? (
         <Image
-          className="object-cover object-top"
+          className="object-cover"
           height={100}
           preview={false}
           src={service.imageUrl}
