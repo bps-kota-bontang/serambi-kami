@@ -5,20 +5,22 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import useServices from "@/hooks/useServices";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Empty, Input, Pagination, Select, SelectProps } from "antd";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const ServicePage = () => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
   const [keyword, setKeyword] = useState<string>("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState(keyword);
+  const debounceTimeoutRef = useRef<number | null>(null);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [tags, setTags] = useState<string[]>([]);
   const [options, setOptions] = useState<SelectProps["options"]>([]);
   const [searchParams] = useSearchParams();
   const { services, total, fetchServices } = useServices(
-    keyword,
+    debouncedKeyword,
     tags,
     page,
     limit
@@ -51,6 +53,14 @@ const ServicePage = () => {
         pathname: window.location.pathname,
         search: searchParams.toString(),
       });
+
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+
+      debounceTimeoutRef.current = window.setTimeout(() => {
+        setDebouncedKeyword(newKeyword);
+      }, 300);
     },
     [navigate]
   );

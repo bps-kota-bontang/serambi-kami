@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getServices } from "@/api/Service";
 import { Service } from "@/types/Service";
 
@@ -12,26 +12,20 @@ const useServices = (
   const [total, setTotal] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const fetchServices = useCallback(async () => {
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
+    try {
+      setIsLoading(true);
+      const data = await getServices(keyword, tags, page, limit);
+      setServices(data.services);
+      setTotal(data.total);
+      setError(null);
+    } catch (error) {
+      setError("An error occurred while fetching services.");
+      console.error("An error occurred: ", error);
+    } finally {
+      setIsLoading(false);
     }
-    debounceTimeout.current = setTimeout(async () => {
-      try {
-        setIsLoading(true);
-        const data = await getServices(keyword, tags, page, limit);
-        setServices(data.services);
-        setTotal(data.total);
-        setError(null);
-      } catch (error) {
-        setError("An error occurred while fetching services.");
-        console.error("An error occurred: ", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 300);
   }, [keyword, tags, page, limit]);
 
   useEffect(() => {
