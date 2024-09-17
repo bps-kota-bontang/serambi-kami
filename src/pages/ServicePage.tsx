@@ -9,16 +9,25 @@ import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const ServicePage = () => {
+  const [searchParams] = useSearchParams();
+  const initialKeyword = searchParams.get("keyword") || "";
+  const initialLimit = parseInt(searchParams.get("limit") || "10") || 10;
+  const initialPage = parseInt(searchParams.get("page") || "1") || 1;
+  const initialTags =
+    searchParams.get("tags") == ""
+      ? []
+      : searchParams.get("tags")?.split(",") || [];
+
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
-  const [keyword, setKeyword] = useState<string>("");
+  const [keyword, setKeyword] = useState<string>(initialKeyword);
+  const [page, setPage] = useState<number>(initialPage);
+  const [limit, setLimit] = useState<number>(initialLimit);
+  const [tags, setTags] = useState<string[]>(initialTags);
+  const [options, setOptions] = useState<SelectProps["options"]>([]);
   const [debouncedKeyword, setDebouncedKeyword] = useState(keyword);
   const debounceTimeoutRef = useRef<number | null>(null);
-  const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
-  const [tags, setTags] = useState<string[]>([]);
-  const [options, setOptions] = useState<SelectProps["options"]>([]);
-  const [searchParams] = useSearchParams();
+
   const { services, total, fetchServices } = useServices(
     debouncedKeyword,
     tags,
@@ -26,33 +35,33 @@ const ServicePage = () => {
     limit
   );
 
+  const syncURLWithState = useCallback(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    searchParams.set("page", page.toString());
+    searchParams.set("limit", limit.toString());
+    searchParams.set("keyword", keyword);
+    searchParams.set("tags", tags.join(","));
+
+    navigate({
+      pathname: window.location.pathname,
+      search: searchParams.toString(),
+    });
+  }, [page, limit, keyword, tags, navigate]);
+
   const onPageChange = useCallback(
     (page: number, pageSize: number) => {
       setPage(page);
       setLimit(pageSize);
-
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set("page", page.toString());
-      searchParams.set("limit", pageSize.toString());
-
-      navigate({
-        pathname: window.location.pathname,
-        search: searchParams.toString(),
-      });
+      syncURLWithState();
     },
-    [navigate]
+    [syncURLWithState]
   );
 
   const onKeywordChange = useCallback(
     (newKeyword: string) => {
       setKeyword(newKeyword);
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set("keyword", newKeyword);
-
-      navigate({
-        pathname: window.location.pathname,
-        search: searchParams.toString(),
-      });
+      syncURLWithState();
 
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
@@ -62,37 +71,16 @@ const ServicePage = () => {
         setDebouncedKeyword(newKeyword);
       }, 300);
     },
-    [navigate]
+    [syncURLWithState]
   );
 
   const onTagsChange = useCallback(
     (value: string[]) => {
       setTags(value);
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set("tags", value.join(","));
-
-      navigate({
-        pathname: window.location.pathname,
-        search: searchParams.toString(),
-      });
+      syncURLWithState();
     },
-    [navigate]
+    [syncURLWithState]
   );
-
-  useEffect(() => {
-    const initialKeyword = searchParams.get("keyword") || "";
-    const initialLimit = parseInt(searchParams.get("limit") || "10") || 10;
-    const initialPage = parseInt(searchParams.get("page") || "1") || 1;
-    const initialTags =
-      searchParams.get("tags") == ""
-        ? []
-        : searchParams.get("tags")?.split(",") || [];
-
-    setKeyword(initialKeyword);
-    setLimit(initialLimit);
-    setPage(initialPage);
-    setTags(initialTags);
-  }, [searchParams]);
 
   useEffect(() => {
     const fetchServiceTags = async () => {
