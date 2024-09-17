@@ -8,15 +8,16 @@ import { Button, Empty, Input, Pagination, Select, SelectProps } from "antd";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
+const DEFAULT_LIMIT = 10;
+const DEFAULT_PAGE = 1;
+
 const ServicePage = () => {
   const [searchParams] = useSearchParams();
   const initialKeyword = searchParams.get("keyword") || "";
-  const initialLimit = parseInt(searchParams.get("limit") || "10") || 10;
-  const initialPage = parseInt(searchParams.get("page") || "1") || 1;
+  const initialLimit = Number(searchParams.get("limit")) || DEFAULT_LIMIT;
+  const initialPage = Number(searchParams.get("page")) || DEFAULT_PAGE;
   const initialTags =
-    searchParams.get("tags") == ""
-      ? []
-      : searchParams.get("tags")?.split(",") || [];
+    searchParams.get("tags")?.split(",")?.filter(Boolean) || [];
 
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
@@ -35,7 +36,7 @@ const ServicePage = () => {
     limit
   );
 
-  const syncURLWithState = useCallback(() => {
+  useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
 
     searchParams.set("page", page.toString());
@@ -49,38 +50,27 @@ const ServicePage = () => {
     });
   }, [page, limit, keyword, tags, navigate]);
 
-  const onPageChange = useCallback(
-    (page: number, pageSize: number) => {
-      setPage(page);
-      setLimit(pageSize);
-      syncURLWithState();
-    },
-    [syncURLWithState]
-  );
+  const onPageChange = useCallback((page: number, pageSize: number) => {
+    setPage(page);
+    setLimit(pageSize);
+  }, []);
 
-  const onKeywordChange = useCallback(
-    (newKeyword: string) => {
-      setKeyword(newKeyword);
-      syncURLWithState();
+  const onKeywordChange = useCallback((newKeyword: string) => {
+    setKeyword(newKeyword);
 
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
 
-      debounceTimeoutRef.current = window.setTimeout(() => {
-        setDebouncedKeyword(newKeyword);
-      }, 300);
-    },
-    [syncURLWithState]
-  );
+    debounceTimeoutRef.current = window.setTimeout(() => {
+      setPage(DEFAULT_PAGE);
+      setDebouncedKeyword(newKeyword);
+    }, 300);
+  }, []);
 
-  const onTagsChange = useCallback(
-    (value: string[]) => {
-      setTags(value);
-      syncURLWithState();
-    },
-    [syncURLWithState]
-  );
+  const onTagsChange = useCallback((value: string[]) => {
+    setTags(value);
+  }, []);
 
   useEffect(() => {
     const fetchServiceTags = async () => {
@@ -134,9 +124,9 @@ const ServicePage = () => {
               align="center"
               total={total}
               showSizeChanger
-              defaultCurrent={1}
+              defaultCurrent={DEFAULT_PAGE}
               current={page}
-              defaultPageSize={10}
+              defaultPageSize={DEFAULT_LIMIT}
               pageSize={limit}
               pageSizeOptions={[10, 20, 50, 100]}
               showQuickJumper
