@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.2.1...v0.2.2) (2024-09-17)
+
+
+### Performance Improvements
+
+* :zap: improve performence list services ([9e13675](https://github.com/bps-kota-bontang/serambi-kami/commit/9e136756f578ba2e53e14dc9c9360833590e607a))
+
 ## [0.2.1](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.2.0...v0.2.1) (2024-09-17)
 
 
