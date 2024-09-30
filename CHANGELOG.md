@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.2.2...v0.3.0) (2024-09-30)
+
+
+### Features
+
+* :sparkles: add logout sso ([4a239fa](https://github.com/bps-kota-bontang/serambi-kami/commit/4a239faad248291a1fac037590964ad8deaca681))
+
 ## [0.2.2](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.2.1...v0.2.2) (2024-09-17)
 
 
