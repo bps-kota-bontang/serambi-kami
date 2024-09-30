@@ -5,10 +5,11 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import { login as loginApi, logout as logoutApi } from "@/api/Auth";
+import { login as loginApi } from "@/api/Auth";
 import { User } from "@/types/User";
 import { me } from "@/api/User";
 import Cookies from "js-cookie";
+import { API_BASE_URL } from "@/configs/Constant";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -105,10 +106,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const logout = useCallback(async () => {
-    await logoutApi();
     setIsAuthenticated(false);
     setUser(null);
     localStorage.removeItem("isAuthenticated");
+    window.location.href = `${API_BASE_URL}/v1/auth/logout`;
   }, []);
 
   return (
