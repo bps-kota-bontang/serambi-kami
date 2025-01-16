@@ -3,9 +3,15 @@ import { Button, Form, Input, App, Divider } from "antd";
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { API_BASE_URL, APP_NAME, HAS_LOGIN_MANUAL, HAS_LOGIN_SSO } from "@/configs/Constant";
+import {
+  API_BASE_URL,
+  APP_NAME,
+  HAS_LOGIN_MANUAL,
+  HAS_LOGIN_SSO,
+} from "@/configs/Constant";
 import LogoBPS from "../../public/bps.svg?react";
 import Cookies from "js-cookie";
+import BackgroundLogin from "@/components/auth/BackgroundLogin";
 
 interface FormLogin {
   email: string;
@@ -16,15 +22,6 @@ const LoginPage = () => {
   const auth = useAuth();
   const { notification } = App.useApp();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [degree, setDegree] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDegree((prev) => (prev + 1) % 360);
-    }, 10);
-
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     if (Cookies.get("useSso") == "true") {
@@ -79,7 +76,7 @@ const LoginPage = () => {
               </span>
             </div>
           </div>
-          {HAS_LOGIN_MANUAL && (
+          {HAS_LOGIN_MANUAL === "true" && (
             <>
               <Divider />
               <Form name="login" onFinish={onFinish}>
@@ -117,7 +114,7 @@ const LoginPage = () => {
               </Form>
             </>
           )}
-          {HAS_LOGIN_SSO ? (
+          {HAS_LOGIN_SSO === "true" && (
             <>
               <Divider />
               <Button
@@ -128,25 +125,10 @@ const LoginPage = () => {
                 Masuk dengan SSO BPS
               </Button>
             </>
-          ) : null}
+          )}
         </div>
       </div>
-      <div
-        id="bg"
-        className="hidden lg:flex lg:flex-1 lg:justify-center rounded-3xl"
-        style={{
-          background: `linear-gradient(${degree}deg, #3b82f6 0%, #05966f 50%, #f56a00 100%)`,
-        }}
-      >
-        <div className="flex flex-col justify-center items-center h-full">
-          <span className="text-white text-2xl font-bold">
-            Selamat Datang Kembali
-          </span>
-          <span className="text-white text-lg font-light">
-            Silahkan masuk untuk melanjutkan
-          </span>
-        </div>
-      </div>
+      <BackgroundLogin />
     </div>
   );
 };
