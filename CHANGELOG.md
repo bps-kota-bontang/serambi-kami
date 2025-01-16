@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.2](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.4.2...v0.4.2) (2025-01-16)
+
+
+### Bug Fixes
+
+* configure env ([e49cb41](https://github.com/bps-kota-bontang/serambi-kami/commit/e49cb418690fcdb5fcb8be3b26a6e1c36593123b))
+
+
+### Miscellaneous Chores
+
+* release 0.4.2 ([0e2e189](https://github.com/bps-kota-bontang/serambi-kami/commit/0e2e1896be97b19a7ae056aacf7cacf9b51eba9c))
+
 ## [0.4.2](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.4.1...v0.4.2) (2025-01-16)
 
 
