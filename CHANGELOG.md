@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.4.0...v0.4.1) (2025-01-16)
+
+
+### Bug Fixes
+
+* conditional form login ([087ffa9](https://github.com/bps-kota-bontang/serambi-kami/commit/087ffa954446cfb4b52ca382d0f0e7ff2cba7209))
+
 ## [0.4.0](https://github.com/bps-kota-bontang/serambi-kami/compare/v4.0.0...v0.4.0) (2025-01-16)
 
 
