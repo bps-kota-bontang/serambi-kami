@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.4](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.4.3...v0.4.4) (2025-01-16)
+
+
+### Bug Fixes
+
+* update authentication settings in development environment ([ae9fc6b](https://github.com/bps-kota-bontang/serambi-kami/commit/ae9fc6b180791052c3244edbc3a2a81019def50b))
+
 ## [0.4.3](https://github.com/bps-kota-bontang/serambi-kami/compare/v0.4.2...v0.4.3) (2025-01-16)
 
 
