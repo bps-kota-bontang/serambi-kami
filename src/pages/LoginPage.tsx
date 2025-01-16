@@ -3,7 +3,7 @@ import { Button, Form, Input, App, Divider } from "antd";
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { API_BASE_URL, APP_NAME, HAS_LOGIN_SSO } from "@/configs/Constant";
+import { API_BASE_URL, APP_NAME, HAS_LOGIN_MANUAL, HAS_LOGIN_SSO } from "@/configs/Constant";
 import LogoBPS from "../../public/bps.svg?react";
 import Cookies from "js-cookie";
 
@@ -79,38 +79,44 @@ const LoginPage = () => {
               </span>
             </div>
           </div>
-          <Divider />
-          <Form name="login" onFinish={onFinish}>
-            <Form.Item
-              name="email"
-              rules={[{ required: true, message: "Please input your Email!" }]}
-            >
-              <Input prefix={<UserOutlined />} placeholder="Email" />
-            </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[
-                { required: true, message: "Please input your Password!" },
-              ]}
-            >
-              <Input
-                prefix={<LockOutlined />}
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Item>
+          {HAS_LOGIN_MANUAL && (
+            <>
+              <Divider />
+              <Form name="login" onFinish={onFinish}>
+                <Form.Item
+                  name="email"
+                  rules={[
+                    { required: true, message: "Please input your Email!" },
+                  ]}
+                >
+                  <Input prefix={<UserOutlined />} placeholder="Email" />
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  rules={[
+                    { required: true, message: "Please input your Password!" },
+                  ]}
+                >
+                  <Input
+                    prefix={<LockOutlined />}
+                    type="password"
+                    placeholder="Password"
+                  />
+                </Form.Item>
 
-            <Form.Item>
-              <Button
-                block
-                type="primary"
-                htmlType="submit"
-                loading={isLoading}
-              >
-                Masuk
-              </Button>
-            </Form.Item>
-          </Form>
+                <Form.Item>
+                  <Button
+                    block
+                    type="primary"
+                    htmlType="submit"
+                    loading={isLoading}
+                  >
+                    Masuk
+                  </Button>
+                </Form.Item>
+              </Form>
+            </>
+          )}
           {HAS_LOGIN_SSO ? (
             <>
               <Divider />
